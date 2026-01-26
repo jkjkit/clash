@@ -8,3 +8,19 @@ SG
 DE
 CA
 ALL
+
+rules:
+  - RULE-DownloadClient,DownloadClient
+  - RULE-AdBlock.AdBlock
+  - RULE-SET,China,China
+  - RULE-SET,Tencent,Tencent
+  - RULE-SET,Microsoft,Microsoft
+  - RULE-SET,Github,Github
+  - RULE-SET,Google,Google
+  - RULE-SET,YouTube,YouTube
+  - RULE-SET,Twitter,Twitter
+  - RULE-SET,Telegram,Telegram
+  - RULE-SET,Proxy,Proxy
+  - RULE-SET,Direct,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,Other
