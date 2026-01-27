@@ -52,7 +52,7 @@ NodeParam: &NodeParam {type: http, interval: 86400, health-check: {enable: true,
 # 锚点 - 节点订阅
 proxy-providers: 
   Sub1:
-    url: '订阅链接1'
+    url: 'https://ryan-ai.de/api/subscription/793cd2aa699a55de3b559da31e147c581101e9bd9389e72f62494f32f65db791'
     <<: *NodeParam
     path: './proxy_provider/Sub1.yaml'
   
@@ -85,7 +85,7 @@ Filter-Other: &Filter-Other '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|U
 #策略组
 proxy-groups:
   # 主策略组 - 按地区显示常用地区节点
-  - {name: Proxy, type: select, proxies: [🇭🇰 HK,🇹🇼 TW,🇺🇸 US,🇬🇧 UK,🇯🇵 JP,🇰🇷 KR,🇸🇬 SG,Pro]}
+  - {name: Proxy, type: select, proxies: [🇭🇰 HK,🇹🇼 TW,🇺🇸 US,🇬🇧 UK,🇯🇵 JP,🇰🇷 KR,🇸🇬 SG,🏠 Pro]}
 
   # 副策略组 - 过滤主策略组的所有节点
   - {name: Other, type: select, include-all-providers: true, filter: *Filter-Other}
@@ -104,7 +104,7 @@ proxy-groups:
   - {name: 🇯🇵 JP, <<: *FallBack, filter: *Filter-JP}
   - {name: 🇰🇷 KR, <<: *FallBack, filter: *Filter-KR}
   - {name: 🇸🇬 SG, <<: *FallBack, filter: *Filter-SG}
-  - {name: Pro, <<: *FallBack, filter: *Filter-Pro}
+  - {name: 🏠 Pro, <<: *FallBack, filter: *Filter-Pro}
   - {name: Other Auto, <<: *FallBack, filter: *Filter-Other}    
 
 #订阅规则
