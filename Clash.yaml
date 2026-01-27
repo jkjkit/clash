@@ -180,7 +180,7 @@ rules:
   - RULE-SET,Adblock,REJECT
   - RULE-SET,China,DIRECT
   - RULE-SET,Tencent,DIRECT
-  - RULE-SET,Microsoft,Proxy
+  - RULE-SET,Microsoft,DIRECT
   - RULE-SET,Github,Proxy
   - RULE-SET,Google,Proxy
   - RULE-SET,YouTube,Proxy
