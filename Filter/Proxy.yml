@@ -433,4 +433,6 @@ payload:
   - DOMAIN-SUFFIX,x-art.com,Proxy
   - DOMAIN-SUFFIX,yimg.com,Proxy
   - DOMAIN,api.steampowered.com,Proxy
-  - DOMAIN,store.steampowered.com,Proxy
+  - DOMAIN-SUFFIX,ping0.cc,Proxy
+  - DOMAIN-SUFFIX,ippure.com,Proxy
+  - DOMAIN-SUFFIX,whoer.net,Proxy
