@@ -1,14 +1,155 @@
-HK
-TW
-US
-UK
-JP
-KR
-SG
-DE
-CA
-ALL
+port: 7890
+socks-port: 7891
+mixed-port: 7892
+redir-port: 7893
+tproxy-port: 7894
 
+unified-delay: true
+geodata-mode: false
+geodata-loader: standard
+geo-auto-update: true
+geo-update-interval: 24
+tcp-concurrent: true
+find-process-mode: strict
+global-client-fingerprint: chrome
+
+allow-lan: true
+mode: rule
+log-level: info
+ipv6: true
+udp: true
+
+external-controller: 0.0.0.0:9090
+
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: true
+
+dns:
+  enable: true
+  prefer-h3: true
+  listen: 0.0.0.0:1053
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 28.0.0.1/8
+  fake-ip-filter:
+    - "*"
+    - +.lan
+  default-nameserver:
+    - 223.5.5.5
+    - 223.6.6.6
+  nameserver:
+    - https://223.5.5.5/dns-query
+    - https://223.6.6.6/dns-query
+
+proxies:
+
+# 锚点 - 节点订阅的参数 [每24小时更新一次订阅节点，每 60 秒一次健康检查]
+NodeParam: &NodeParam {type: http, interval: 86400, health-check: {enable: true, url: 'http://connectivitycheck.gstatic.com/generate_204', interval: 60}}
+
+# 锚点 - 节点订阅
+proxy-providers: 
+  我的节点:
+    url: 'url地址'
+    <<: *NodeParam
+    path: './proxy_provider/Providers.yaml'
+
+# 锚点 - 故障转移参数 [每 10 秒一次惰性健康检查，时延超过 3 秒判定为失败，失败 3 次则自动触发健康检查]
+FallBack: &FallBack {type: fallback, interval: 10, lazy: true, url: 'http://connectivitycheck.gstatic.com/generate_204', disable-udp: false, timeout: 3000, max-failed-times: 3, hidden: true, include-all-providers: true}
+# 锚点 - 规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
+RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yaml, proxy: Proxy}
+
+# 锚点 - 节点筛选
+proxy-providers-filter:
+  proxy-filter-Local: &proxy-filter-Local ''
+  proxy-filter-HK: &proxy-filter-HK '香港|HK|HongKong'
+  proxy-filter-TW: &proxy-filter-TW '台湾|TW|Taiwan'
+  proxy-filter-US: &proxy-filter-US '美国|US|United States|America'
+  proxy-filter-UK: &proxy-filter-US '英国|UK|United Kingdom|England'
+  proxy-filter-JP: &proxy-filter-JP '日本|JP|Japan'
+  proxy-filter-KR: &proxy-filter-KR '韩国|KR|Korean'
+  proxy-filter-SG: &proxy-filter-HK '新加坡|SG|Singapore'
+
+#策略组
+proxy-groups:
+  - {name: Proxy, type: select, proxies: [🇭🇰 HK,🇹🇼 TW,🇺🇸 US,🇬🇧 UK,JP,🇰🇷 KR,🇸🇬 SG], icon: 'https://raw.githubusercontent.com/pompurin404/mihomo-party/master/resources/icon.png'}
+  - {name: 🇭🇰 HK, <<: *FallBack, filter: *FilterHK}
+  - {name: 🇹🇼 TW, <<: *FallBack, filter: *FilterTW}
+  - {name: 🇺🇸 US, <<: *FallBack, filter: *FilterUS}
+  - {name: 🇬🇧 UK, <<: *FallBack, filter: *FilterUK}
+  - {name: 🇰🇷 KR, <<: *FallBack, filter: *FilterFR}
+  - {name: 🇯🇵 JP, <<: *FallBack, filter: *FilterJP}
+
+#订阅规则
+rule-providers:
+  Adblock:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/AdBlock.yml'
+    path: './RuleSet/AdBlock.yml'
+
+  China:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/China.yml'
+    path: './RuleSet/China.yml'
+
+  Direct:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Direct.yml'
+    path: './RuleSet/Direct.yml'
+
+  DownloadClient:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/DownloadClient.yml'
+    path: './RuleSet/DownloadClient.yml'
+
+  Github:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Github.yml'
+    path: './RuleSet/Github.yml'
+
+  Google:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Google.yml'
+    path: './RuleSet/Google.yml'
+
+  Microsoft:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Microsoft.yml'
+    path: './RuleSet/Microsoft.yml'
+
+  Proxy:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Proxy.yml'
+    path: './RuleSet/Proxy.yml'
+
+  ProxyClient:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/ProxyClient.yml'
+    path: './RuleSet/ProxyClient.yml'
+
+  Telegram:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Telegram.yml'
+    path: './RuleSet/Telegram.yml'
+
+  Tencent:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Tencent.yml'
+    path: './RuleSet/Tencent.yml'
+
+  Twitter:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Twitter.yml'
+    path: './RuleSet/Twitter.yml'
+
+  YouTube:
+    <<: *RuleSet
+    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Youtube.yml'
+    path: './RuleSet/YouTube.yml'
+
+#分流规则
 rules:
   - RULE-DownloadClient,DownloadClient
   - RULE-AdBlock.AdBlock
