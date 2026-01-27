@@ -51,10 +51,20 @@ NodeParam: &NodeParam {type: http, interval: 86400, health-check: {enable: true,
 
 # 锚点 - 节点订阅
 proxy-providers: 
-  我的节点:
-    url: 'https://kjhduies.ikuuu.sbs/npolkiuyt?token=c8ed4684fbe3757448d27dc9242fc8c4'
+  Sub1:
+    url: '订阅链接1'
     <<: *NodeParam
-    path: './proxy_provider/Providers.yaml'
+    path: './proxy_provider/Sub1.yaml'
+  
+  Sub2:
+    url: '订阅链接2'
+    <<: *NodeParam
+    path: './proxy_provider/Sub2.yaml'
+  
+  Sub3:
+    url: '订阅链接3'
+    <<: *NodeParam
+    path: './proxy_provider/Sub3.yaml'
 
 # 锚点 - 故障转移参数 [每 10 秒一次惰性健康检查，时延超过 3 秒判定为失败，失败 3 次则自动触发健康检查]
 FallBack: &FallBack {type: fallback, interval: 10, lazy: true, url: 'http://connectivitycheck.gstatic.com/generate_204', disable-udp: false, timeout: 3000, max-failed-times: 3, hidden: true, include-all-providers: true}
@@ -62,25 +72,40 @@ FallBack: &FallBack {type: fallback, interval: 10, lazy: true, url: 'http://conn
 RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yaml, proxy: Proxy}
 
 # 锚点 - 节点筛选
-proxy-providers-filter:
-  filter-Local: &filter-Local ''
-  filter-HK: &filter-HK '香港|HK|HongKong'
-  filter-TW: &filter-TW '台湾|TW|Taiwan'
-  filter-US: &filter-US '美国|US|United States|America'
-  filter-UK: &filter-US '英国|UK|United Kingdom|England'
-  filter-JP: &filter-JP '日本|JP|Japan'
-  filter-KR: &filter-KR '韩国|KR|Korean'
-  filter-SG: &filter-HK '新加坡|SG|Singapore'
+Filter-HK: &Filter-HK '香港|HK|HongKong'
+Filter-TW: &Filter-TW '台湾|TW|Taiwan'
+Filter-US: &Filter-US '美国|US|United States|America'
+Filter-UK: &Filter-UK '英国|UK|United Kingdom|England'
+Filter-JP: &Filter-JP '日本|JP|Japan'
+Filter-KR: &Filter-KR '韩国|KR|Korean'
+Filter-SG: &Filter-SG '新加坡|SG|Singapore'
+Filter-Pro: &Filter-Pro '家宽|专线'
+Filter-Other: &Filter-Other '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|United States|America|英国|UK|United Kingdom|England|日本|JP|Japan|韩国|KR|Korean|新加坡|SG|Singapore)).*$'
 
 #策略组
 proxy-groups:
-  - {name: Proxy, type: select, proxies: [🇭🇰 HK,🇹🇼 TW,🇺🇸 US,🇬🇧 UK,JP,🇰🇷 KR,🇸🇬 SG], icon: 'https://raw.githubusercontent.com/pompurin404/mihomo-party/master/resources/icon.png'}
-  - {name: 🇭🇰 HK, <<: *FallBack, filter: *FilterHK}
-  - {name: 🇹🇼 TW, <<: *FallBack, filter: *FilterTW}
-  - {name: 🇺🇸 US, <<: *FallBack, filter: *FilterUS}
-  - {name: 🇬🇧 UK, <<: *FallBack, filter: *FilterUK}
-  - {name: 🇯🇵 JP, <<: *FallBack, filter: *FilterJP}
-  - {name: 🇰🇷 KR, <<: *FallBack, filter: *FilterFR}
+  # 主策略组 - 包含所有国家分组和所有节点
+  - {name: Proxy, type: select, proxies: [🇭🇰 HK,🇹🇼 TW,🇺🇸 US,🇬🇧 UK,🇯🇵 JP,🇰🇷 KR,🇸🇬 SG,Pro]}
+
+  # 其他地区分组 - 包含除了上述7个国家/地区之外的所有节点
+  - {name: Other, type: select, include-all-providers: true, filter: *Filter-Other}
+  
+  # 所有节点策略组 - 显示所有订阅节点
+  - {name: All, type: select, include-all-providers: true}
+
+  # 第一个订阅链接
+  - {name: Sub1, type: select, use: [Sub1]}  
+    
+  # 国家/地区分组（自动故障转移）
+  - {name: 🇭🇰 HK, <<: *FallBack, filter: *Filter-HK}
+  - {name: 🇹🇼 TW, <<: *FallBack, filter: *Filter-TW}
+  - {name: 🇺🇸 US, <<: *FallBack, filter: *Filter-US}
+  - {name: 🇬🇧 UK, <<: *FallBack, filter: *Filter-UK}
+  - {name: 🇯🇵 JP, <<: *FallBack, filter: *Filter-JP}
+  - {name: 🇰🇷 KR, <<: *FallBack, filter: *Filter-KR}
+  - {name: 🇸🇬 SG, <<: *FallBack, filter: *Filter-SG}
+  - {name: Pro, <<: *FallBack, filter: *Filter-Pro}
+  - {name: Other Auto, <<: *FallBack, filter: *Filter-Other}    
 
 #订阅规则
 rule-providers:
@@ -151,17 +176,17 @@ rule-providers:
 
 #分流规则
 rules:
-  - RULE-DownloadClient,DownloadClient
-  - RULE-AdBlock.AdBlock
-  - RULE-SET,China,China
-  - RULE-SET,Tencent,Tencent
-  - RULE-SET,Microsoft,Microsoft
-  - RULE-SET,Github,Github
-  - RULE-SET,Google,Google
-  - RULE-SET,YouTube,YouTube
-  - RULE-SET,Twitter,Twitter
-  - RULE-SET,Telegram,Telegram
+  - RULE-SET,DownloadClient,DIRECT
+  - RULE-SET,Adblock,REJECT
+  - RULE-SET,China,DIRECT
+  - RULE-SET,Tencent,DIRECT
+  - RULE-SET,Microsoft,Proxy
+  - RULE-SET,Github,Proxy
+  - RULE-SET,Google,Proxy
+  - RULE-SET,YouTube,Proxy
+  - RULE-SET,Twitter,Proxy
+  - RULE-SET,Telegram,Proxy
   - RULE-SET,Proxy,Proxy
   - RULE-SET,Direct,DIRECT
   - GEOIP,CN,DIRECT
-  - MATCH,Other
+  - MATCH,Proxy
