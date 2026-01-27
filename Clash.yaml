@@ -85,7 +85,7 @@ Filter-Other: &Filter-Other '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|U
 #策略组
 proxy-groups:
   # 主策略组 - 按地区显示常用地区节点
-  - {name: Proxy, type: select, proxies: [🇭🇰 HK,🇹🇼 TW,🇺🇸 US,🇬🇧 UK,🇯🇵 JP,🇰🇷 KR,🇸🇬 SG,🏠 Pro]}
+  - {name: Proxy, type: select, proxies: [🇭🇰 HK,🇹🇼 TW,🇺🇸 US,🇬🇧 UK,🇯🇵 JP,🇰🇷 KR,🇸🇬 SG,🏠 Pro,Other,DIRECT]}
 
   # 副策略组 - 过滤主策略组的所有节点
   - {name: Other, type: select, include-all-providers: true, filter: *Filter-Other}
