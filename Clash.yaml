@@ -80,20 +80,20 @@ Filter-JP: &Filter-JP '日本|JP|Japan'
 Filter-KR: &Filter-KR '韩国|KR|Korean'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
 Filter-Pro: &Filter-Pro '家宽|专线'
-Filter-Other: &Filter-Other '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|United States|America|英国|UK|United Kingdom|England|日本|JP|Japan|韩国|KR|Korean|新加坡|SG|Singapore)).*$'
+Filter-Other: &Filter-Other '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|United States|America|英国|UK|United Kingdom|England|日本|JP|Japan|韩国|KR|Korean|新加坡|SG|Singapore|家宽|专线)).*$'
 
 #策略组
 proxy-groups:
-  # 主策略组 - 包含所有国家分组和所有节点
+  # 主策略组 - 按地区显示常用地区节点
   - {name: Proxy, type: select, proxies: [🇭🇰 HK,🇹🇼 TW,🇺🇸 US,🇬🇧 UK,🇯🇵 JP,🇰🇷 KR,🇸🇬 SG,Pro]}
 
-  # 其他地区分组 - 包含除了上述7个国家/地区之外的所有节点
+  # 副策略组 - 过滤主策略组的所有节点
   - {name: Other, type: select, include-all-providers: true, filter: *Filter-Other}
   
-  # 所有节点策略组 - 显示所有订阅节点
+  # 全策略组 - 显示所有订阅节点
   - {name: All, type: select, include-all-providers: true}
 
-  # 第一个订阅链接
+  # 单策略组 - 显示订阅链接节点
   - {name: Sub1, type: select, use: [Sub1]}  
     
   # 国家/地区分组（自动故障转移）
