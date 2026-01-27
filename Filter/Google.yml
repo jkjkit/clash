@@ -464,6 +464,7 @@ payload:
   - DOMAIN-SUFFIX,googlefinland.com
   - DOMAIN-SUFFIX,googleflights-cn.net
   - DOMAIN-SUFFIX,googlemail.com
+  - DOMAIN-SUFFIX,mail.google.com
   - DOMAIN-SUFFIX,googlemaps.com
   - DOMAIN-SUFFIX,googlemashups.com
   - DOMAIN-SUFFIX,googleoptimize-cn.com
