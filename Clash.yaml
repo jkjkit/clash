@@ -52,7 +52,7 @@ NodeParam: &NodeParam {type: http, interval: 86400, health-check: {enable: true,
 # 锚点 - 节点订阅
 proxy-providers: 
   我的节点:
-    url: 'url地址'
+    url: 'https://kjhduies.ikuuu.sbs/npolkiuyt?token=c8ed4684fbe3757448d27dc9242fc8c4'
     <<: *NodeParam
     path: './proxy_provider/Providers.yaml'
 
@@ -63,14 +63,14 @@ RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yam
 
 # 锚点 - 节点筛选
 proxy-providers-filter:
-  proxy-filter-Local: &proxy-filter-Local ''
-  proxy-filter-HK: &proxy-filter-HK '香港|HK|HongKong'
-  proxy-filter-TW: &proxy-filter-TW '台湾|TW|Taiwan'
-  proxy-filter-US: &proxy-filter-US '美国|US|United States|America'
-  proxy-filter-UK: &proxy-filter-US '英国|UK|United Kingdom|England'
-  proxy-filter-JP: &proxy-filter-JP '日本|JP|Japan'
-  proxy-filter-KR: &proxy-filter-KR '韩国|KR|Korean'
-  proxy-filter-SG: &proxy-filter-HK '新加坡|SG|Singapore'
+  filter-Local: &filter-Local ''
+  filter-HK: &filter-HK '香港|HK|HongKong'
+  filter-TW: &filter-TW '台湾|TW|Taiwan'
+  filter-US: &filter-US '美国|US|United States|America'
+  filter-UK: &filter-US '英国|UK|United Kingdom|England'
+  filter-JP: &filter-JP '日本|JP|Japan'
+  filter-KR: &filter-KR '韩国|KR|Korean'
+  filter-SG: &filter-HK '新加坡|SG|Singapore'
 
 #策略组
 proxy-groups:
@@ -79,8 +79,8 @@ proxy-groups:
   - {name: 🇹🇼 TW, <<: *FallBack, filter: *FilterTW}
   - {name: 🇺🇸 US, <<: *FallBack, filter: *FilterUS}
   - {name: 🇬🇧 UK, <<: *FallBack, filter: *FilterUK}
-  - {name: 🇰🇷 KR, <<: *FallBack, filter: *FilterFR}
   - {name: 🇯🇵 JP, <<: *FallBack, filter: *FilterJP}
+  - {name: 🇰🇷 KR, <<: *FallBack, filter: *FilterFR}
 
 #订阅规则
 rule-providers:
