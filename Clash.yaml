@@ -52,7 +52,7 @@ NodeParam: &NodeParam {type: http, interval: 86400, health-check: {enable: true,
 # 锚点 - 节点订阅
 proxy-providers: 
   Sub1:
-    url: 'https://ryan-ai.de/api/subscription/793cd2aa699a55de3b559da31e147c581101e9bd9389e72f62494f32f65db791'
+    url: '订阅链接1'
     <<: *NodeParam
     path: './proxy_provider/Sub1.yaml'
   
