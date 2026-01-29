@@ -89,38 +89,14 @@ proxy-groups:
 
 # ======= 规则集 =======
 rule-providers:
-#广告拦截
-  reject:
-    <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
-    path: ./profiles/rules/reject.txt
-#代理列表  
+
   proxy:
     <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt"
+    url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Rule/jkiter.yaml"
     path: ./profiles/rules/proxy.txt
-#直连列表
-  direct:
-    <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
-    path: ./profiles/rules/direct.txt
-#大陆地址
-  cncidr:
-    <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/cncidr.txt"
-    path: ./profiles/rules/cncidr.txt
-#软件列表
-  applications:
-    <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
-    path: ./profiles/rules/applications.txt
 
 # ======= 规则 =======
 rules:
-  - RULE-SET,reject,REJECT
   - RULE-SET,proxy,Proxy
-  - RULE-SET,cncidr,DIRECT
-  - RULE-SET,applications,DIRECT
-  - RULE-SET,direct,DIRECT  
   - GEOIP,CN,DIRECT
-  - MATCH,Proxy
+  - MATCH,DIRECT
