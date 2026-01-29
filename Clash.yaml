@@ -1,8 +1,11 @@
+# Clash 配置模板
 port: 7890
 socks-port: 7891
-mixed-port: 7892
-redir-port: 7893
-tproxy-port: 7894
+allow-lan: true
+mode: rule
+log-level: info
+ipv6: true
+udp: true
 
 unified-delay: true
 geodata-mode: false
@@ -12,12 +15,6 @@ geo-update-interval: 24
 tcp-concurrent: true
 find-process-mode: strict
 global-client-fingerprint: chrome
-
-allow-lan: true
-mode: rule
-log-level: info
-ipv6: true
-udp: true
 
 external-controller: 0.0.0.0:9090
 
@@ -35,8 +32,13 @@ dns:
   enhanced-mode: fake-ip
   fake-ip-range: 28.0.0.1/8
   fake-ip-filter:
-    - "*"
-    - +.lan
+  - "*.lan"
+  - "*.local"
+  - localhost.ptlogin2.qq.com
+  - +.srv.nintendo.net
+  - +.stun.playstation.net
+  - +.msftconnecttest.com
+  - +.msftncsi.com
   default-nameserver:
     - 223.5.5.5
     - 223.6.6.6
@@ -44,34 +46,18 @@ dns:
     - https://223.5.5.5/dns-query
     - https://223.6.6.6/dns-query
 
-proxies:
+# ======= 锚点定义 =======
 
-# 锚点 - 节点订阅的参数 [每24小时更新一次订阅节点，每 60 秒一次健康检查]
-NodeParam: &NodeParam {type: http, interval: 86400, health-check: {enable: true, url: 'http://connectivitycheck.gstatic.com/generate_204', interval: 60}}
+#节点检测 [每24小时更新一次订阅节点，每 60 秒一次健康检查]
+pr: &pr {type: http, interval: 86400, health-check: {enable: true, interval: 60, url: "http://www.gstatic.com/generate_204"}}
 
-# 锚点 - 节点订阅
-proxy-providers: 
-  Sub1:
-    url: '订阅链接1'
-    <<: *NodeParam
-    path: './proxy_provider/Sub1.yaml'
-  
-  Sub2:
-    url: '订阅链接2'
-    <<: *NodeParam
-    path: './proxy_provider/Sub2.yaml'
-  
-  Sub3:
-    url: '订阅链接3'
-    <<: *NodeParam
-    path: './proxy_provider/Sub3.yaml'
+#故障转移 [每 10 秒一次惰性健康检查，时延超过 3 秒判定为失败，失败 3 次则自动触发健康检查]
+failover: &failover {type: fallback, lazy: true, interval: 10, url: "http://www.gstatic.com/generate_204", timeout: 3000, max-failed-times: 3, hidden: true, include-all-providers: true}
 
-# 锚点 - 故障转移参数 [每 10 秒一次惰性健康检查，时延超过 3 秒判定为失败，失败 3 次则自动触发健康检查]
-FallBack: &FallBack {type: fallback, interval: 10, lazy: true, url: 'http://connectivitycheck.gstatic.com/generate_204', disable-udp: false, timeout: 3000, max-failed-times: 3, hidden: true, include-all-providers: true}
-# 锚点 - 规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
+#规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
 RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yaml, proxy: Proxy}
 
-# 锚点 - 节点筛选
+#节点过滤 []
 Filter-HK: &Filter-HK '香港|HK|HongKong'
 Filter-TW: &Filter-TW '台湾|TW|Taiwan'
 Filter-US: &Filter-US '美国|US|United States|America'
@@ -79,114 +65,62 @@ Filter-UK: &Filter-UK '英国|UK|United Kingdom|England'
 Filter-JP: &Filter-JP '日本|JP|Japan'
 Filter-KR: &Filter-KR '韩国|KR|Korean'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
-Filter-Pro: &Filter-Pro '家宽|专线'
-Filter-Other: &Filter-Other '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|United States|America|英国|UK|United Kingdom|England|日本|JP|Japan|韩国|KR|Korean|新加坡|SG|Singapore|家宽|专线)).*$'
+Filter-UN: &Filter-UN '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|United States|America|英国|UK|United Kingdom|England|日本|JP|Japan|韩国|KR|Korean|新加坡|SG|Singapore|家宽|专线)).*$'
 
-#策略组
+# ======= 订阅节点 =======
+proxy-providers:
+  Sub:
+    <<: *pr
+    url: "https://ryan-ai.de/api/subscription/793cd2aa699a55de3b559da31e147c581101e9bd9389e72f62494f32f65db791"
+    path: ./profiles/proxies/subscription.yaml
+
+# ======= 策略组 =======
 proxy-groups:
-  # 主策略组 - 按地区显示常用地区节点
-  - {name: Proxy, type: select, proxies: [🇭🇰 HK,🇹🇼 TW,🇺🇸 US,🇬🇧 UK,🇯🇵 JP,🇰🇷 KR,🇸🇬 SG,🏠 Pro,Other,DIRECT]}
+  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN,Select,DIRECT]}
+  - {name: Select, type: select, use: [Sub]}  
+  - {name: HK, <<: *failover, filter: *Filter-HK}
+  - {name: TW, <<: *failover, filter: *Filter-TW}
+  - {name: US, <<: *failover, filter: *Filter-US}
+  - {name: UK, <<: *failover, filter: *Filter-UK}  
+  - {name: JP, <<: *failover, filter: *Filter-JP}
+  - {name: KR, <<: *failover, filter: *Filter-KR}
+  - {name: SG, <<: *failover, filter: *Filter-SG}  
+  - {name: UN, <<: *failover, filter: *Filter-UN}
 
-  # 副策略组 - 过滤主策略组的所有节点
-  - {name: Other, type: select, include-all-providers: true, filter: *Filter-Other}
-  
-  # 全策略组 - 显示所有订阅节点
-  - {name: All, type: select, include-all-providers: true}
-
-  # 单策略组 - 显示订阅链接节点
-  - {name: Sub1, type: select, use: [Sub1]}  
-    
-  # 国家/地区分组（自动故障转移）
-  - {name: 🇭🇰 HK, <<: *FallBack, filter: *Filter-HK}
-  - {name: 🇹🇼 TW, <<: *FallBack, filter: *Filter-TW}
-  - {name: 🇺🇸 US, <<: *FallBack, filter: *Filter-US}
-  - {name: 🇬🇧 UK, <<: *FallBack, filter: *Filter-UK}
-  - {name: 🇯🇵 JP, <<: *FallBack, filter: *Filter-JP}
-  - {name: 🇰🇷 KR, <<: *FallBack, filter: *Filter-KR}
-  - {name: 🇸🇬 SG, <<: *FallBack, filter: *Filter-SG}
-  - {name: 🏠 Pro, <<: *FallBack, filter: *Filter-Pro}
-  - {name: Other Auto, <<: *FallBack, filter: *Filter-Other}    
-
-#订阅规则
+# ======= 规则集 =======
 rule-providers:
-  Adblock:
+#广告拦截
+  reject:
     <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/AdBlock.yml'
-    path: './RuleSet/AdBlock.yml'
-
-  China:
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
+    path: ./profiles/rules/reject.txt
+#代理列表  
+  proxy:
     <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/China.yml'
-    path: './RuleSet/China.yml'
-
-  Direct:
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt"
+    path: ./profiles/rules/proxy.txt
+#直连列表
+  direct:
     <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Direct.yml'
-    path: './RuleSet/Direct.yml'
-
-  DownloadClient:
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
+    path: ./profiles/rules/direct.txt
+#大陆地址
+  cncidr:
     <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/DownloadClient.yml'
-    path: './RuleSet/DownloadClient.yml'
-
-  Github:
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/cncidr.txt"
+    path: ./profiles/rules/cncidr.txt
+#软件列表
+  applications:
     <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Github.yml'
-    path: './RuleSet/Github.yml'
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
+    path: ./profiles/rules/applications.txt
 
-  Google:
-    <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Google.yml'
-    path: './RuleSet/Google.yml'
-
-  Microsoft:
-    <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Microsoft.yml'
-    path: './RuleSet/Microsoft.yml'
-
-  Proxy:
-    <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Proxy.yml'
-    path: './RuleSet/Proxy.yml'
-
-  ProxyClient:
-    <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/ProxyClient.yml'
-    path: './RuleSet/ProxyClient.yml'
-
-  Telegram:
-    <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Telegram.yml'
-    path: './RuleSet/Telegram.yml'
-
-  Tencent:
-    <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Tencent.yml'
-    path: './RuleSet/Tencent.yml'
-
-  Twitter:
-    <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Twitter.yml'
-    path: './RuleSet/Twitter.yml'
-
-  YouTube:
-    <<: *RuleSet
-    url: 'https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Filter/Youtube.yml'
-    path: './RuleSet/YouTube.yml'
-
-#分流规则
+# ======= 规则 =======
 rules:
-  - RULE-SET,DownloadClient,DIRECT
-  - RULE-SET,Adblock,REJECT
-  - RULE-SET,China,DIRECT
-  - RULE-SET,Tencent,DIRECT
-  - RULE-SET,Microsoft,DIRECT
-  - RULE-SET,Github,Proxy
-  - RULE-SET,Google,Proxy
-  - RULE-SET,YouTube,Proxy
-  - RULE-SET,Twitter,Proxy
-  - RULE-SET,Telegram,Proxy
-  - RULE-SET,Proxy,Proxy
-  - RULE-SET,Direct,DIRECT
+  - RULE-SET,reject,REJECT
+  - RULE-SET,proxy,Proxy
+  - RULE-SET,cncidr,DIRECT
+  - RULE-SET,applications,DIRECT
+  - RULE-SET,direct,DIRECT  
   - GEOIP,CN,DIRECT
   - MATCH,Proxy
