@@ -71,7 +71,7 @@ Filter-UN: &Filter-UN '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|Unit
 proxy-providers:
   Sub:
     <<: *pr
-    url: "https://ryan-ai.de/api/subscription/793cd2aa699a55de3b559da31e147c581101e9bd9389e72f62494f32f65db791"
+    url: "订阅链接"
     path: ./profiles/proxies/subscription.yaml
 
 # ======= 策略组 =======
