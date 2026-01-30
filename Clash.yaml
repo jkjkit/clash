@@ -67,19 +67,22 @@ Filter-KR: &Filter-KR '韩国|KR|Korean'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
 Filter-UN: &Filter-UN '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|United States|America|英国|UK|United Kingdom|England|日本|JP|Japan|韩国|KR|Korean|新加坡|SG|Singapore|家宽|专线)).*$'
 
+# ======= 静态节点 =======
+
+proxies:
+    - { name: StaticA, type: anytls, server: 152.53.54.139, port: 36001, password: 10f43971-47cd-45f6-ae37-8e0a973fe532, client-fingerprint: chrome, udp: true, alpn: [h2, http/1.1], sni: hk.zongyunti.site, skip-cert-verify: true }
+    - { name: StaticB, type: anytls, server: 152.53.54.139, port: 36001, password: 10f43971-47cd-45f6-ae37-8e0a973fe532, client-fingerprint: chrome, udp: true, alpn: [h2, http/1.1], sni: hk.zongyunti.site, skip-cert-verify: true }
+    
 # ======= 订阅节点 =======
 proxy-providers:
   Sub:
     <<: *pr
     url: "订阅链接"
     path: ./profiles/proxies/subscription.yaml
-# ======= 静态节点 =======
-proxies:
-
 
 # ======= 策略组 =======
 proxy-groups:
-  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN,Select,DIRECT]}
+  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN,Select,DIRECT, StaticA, StaticB]}
   - {name: Select, type: select, use: [Sub]}  
   - {name: HK, <<: *failover, filter: *Filter-HK}
   - {name: TW, <<: *failover, filter: *Filter-TW}
@@ -91,6 +94,7 @@ proxy-groups:
   - {name: UN, <<: *failover, filter: *Filter-UN}
 
 # ======= 规则集 =======
+rule-providers:
 #广告拦截
   reject:
     <<: *RuleSet
@@ -119,6 +123,10 @@ proxy-groups:
 
 # ======= 规则 =======
 rules:
+
+  - 'DOMAIN-SUFFIX,061899.xyz,DIRECT'
+  - 'DOMAIN-SUFFIX,bkpcp.top,DIRECT'
+
   - RULE-SET,reject,REJECT
   - RULE-SET,proxy,Proxy
   - RULE-SET,cncidr,DIRECT
