@@ -73,6 +73,9 @@ proxy-providers:
     <<: *pr
     url: "订阅链接"
     path: ./profiles/proxies/subscription.yaml
+# ======= 静态节点 =======
+proxies:
+
 
 # ======= 策略组 =======
 proxy-groups:
