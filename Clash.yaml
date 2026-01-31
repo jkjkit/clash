@@ -54,6 +54,9 @@ pr: &pr {type: http, interval: 86400, health-check: {enable: true, interval: 60,
 #故障转移 [每 10 秒一次惰性健康检查，时延超过 3 秒判定为失败，失败 3 次则自动触发健康检查]
 failover: &failover {type: fallback, lazy: true, interval: 10, url: "http://www.gstatic.com/generate_204", timeout: 3000, max-failed-times: 3, hidden: true, include-all-providers: true}
 
+#负载均衡
+balance: &balance {type: load-balance, strategy: consistent-hashing, url: 'http://www.gstatic.com/generate_204', interval: 300, tolerance: 50}
+
 #规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
 RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yaml, proxy: Proxy}
 
@@ -86,7 +89,7 @@ proxy-providers:
 proxy-groups:
   - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,DIRECT,Select,Static]}
   - {name: Select, type: select, use: [Sub]}
-  - {name: Static, <<: *failover, filter: *Filter-Static}
+  - {name: Static, <<: *balance, filter: *Filter-Static}
   - {name: HK, <<: *failover, filter: *Filter-HK}
   - {name: TW, <<: *failover, filter: *Filter-TW}
   - {name: US, <<: *failover, filter: *Filter-US}
