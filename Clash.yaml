@@ -66,15 +66,15 @@ Filter-JP: &Filter-JP '日本|JP|Japan'
 Filter-KR: &Filter-KR '韩国|KR|Korean'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
 Filter-UN: &Filter-UN '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|United States|America|英国|UK|United Kingdom|England|日本|JP|Japan|韩国|KR|Korean|新加坡|SG|Singapore|家宽|专线)).*$'
-
+Filter-Static: &Filter-UN 'usa|usb|usc|usd'
 # ======= 静态节点 =======
 
 proxies:
 
-    - {name: "StaticA", type: anytls, server: 152.53.54.139, port: 36001, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, sni: hk.zongyunti.site, skip-cert-verify: true, client-fingerprint: chrome, alpn: [h2, http/1.1], udp: true}
-    - {name: "StaticB", type: hysteria2, server: 81.31.232.60, port: 36002, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, obfs: salamander, obfs-password: ODczNTFlNmQ0YWVlZGUzOQ==, sni: hk1.zongyunti.site, skip-cert-verify: true, udp: true}
-    - {name: "StaticC", type: hysteria2, server: 152.53.54.167, port: 36002, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, obfs: salamander, obfs-password: ODczNTFlNmQ0YWVlZGUzOQ==, sni: hk1.zongyunti.site, skip-cert-verify: true, udp: true}
-    - {name: "StaticD", type: hysteria2, server: 152.53.54.139, port: 36002, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, sni: hk1.zongyunti.site, skip-cert-verify: true, udp: true}
+    - {name: "usa", type: anytls, server: 152.53.54.139, port: 36001, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, sni: hk.zongyunti.site, skip-cert-verify: true, client-fingerprint: chrome, alpn: [h2, http/1.1], udp: true}
+    - {name: "usb", type: hysteria2, server: 81.31.232.60, port: 36002, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, obfs: salamander, obfs-password: ODczNTFlNmQ0YWVlZGUzOQ==, sni: hk1.zongyunti.site, skip-cert-verify: true, udp: true}
+    - {name: "usc", type: hysteria2, server: 152.53.54.167, port: 36002, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, obfs: salamander, obfs-password: ODczNTFlNmQ0YWVlZGUzOQ==, sni: hk1.zongyunti.site, skip-cert-verify: true, udp: true}
+    - {name: "usd", type: hysteria2, server: 152.53.54.139, port: 36002, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, sni: hk1.zongyunti.site, skip-cert-verify: true, udp: true}
 
 # ======= 订阅节点 =======
 proxy-providers:
@@ -85,8 +85,9 @@ proxy-providers:
 
 # ======= 策略组 =======
 proxy-groups:
-  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN,Select,DIRECT, StaticA, StaticB,StaticC,StaticD]}
-  - {name: Select, type: select, use: [Sub]}  
+  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,DIRECT,Select,Static]}
+  - {name: Select, type: select, use: [Sub]}
+  - {name: Static, <<: *failover, filter: *Filter-Static}
   - {name: HK, <<: *failover, filter: *Filter-HK}
   - {name: TW, <<: *failover, filter: *Filter-TW}
   - {name: US, <<: *failover, filter: *Filter-US}
@@ -94,7 +95,6 @@ proxy-groups:
   - {name: JP, <<: *failover, filter: *Filter-JP}
   - {name: KR, <<: *failover, filter: *Filter-KR}
   - {name: SG, <<: *failover, filter: *Filter-SG}  
-  - {name: UN, <<: *failover, filter: *Filter-UN}
 
 # ======= 规则集 =======
 rule-providers:
