@@ -65,8 +65,7 @@ Filter-UK: &Filter-UK '英国|UK|United Kingdom|England'
 Filter-JP: &Filter-JP '日本|JP|Japan'
 Filter-KR: &Filter-KR '韩国|KR|Korean'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
-Filter-UN: &Filter-UN '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|United States|America|英国|UK|United Kingdom|England|日本|JP|Japan|韩国|KR|Korean|新加坡|SG|Singapore|家宽|专线)).*$'
-Filter-Static: &Filter-UN 'usa|usb|usc|usd'
+Filter-Static: &Filter-Static 'usa|usb|usc|usd'
 # ======= 静态节点 =======
 
 proxies:
