@@ -81,7 +81,7 @@ proxy-groups:
   - {name: JP, <<: *UrlTest, filter: *FilterJP}
   - {name: KR, <<: *UrlTest, filter: *FilterKR}
   - {name: SG, <<: *UrlTest, filter: *FilterSG}
-  - {name: UN, <<: *UrlTest, filter: *FilterFR}
+  - {name: UN, <<: *UrlTest, filter: *FilterUN}
 
 rules:
 
