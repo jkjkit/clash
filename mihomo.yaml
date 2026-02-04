@@ -1,0 +1,99 @@
+port: 7890
+socks-port: 7891
+
+allow-lan: true
+mode: rule
+log-level: info
+ipv6: true
+udp: true
+
+unified-delay: true
+geodata-mode: false
+geodata-loader: standard
+geo-auto-update: true
+geo-update-interval: 24
+tcp-concurrent: true
+find-process-mode: strict
+global-client-fingerprint: chrome
+
+geox-url:
+  geoip: 'https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geoip.dat'
+  geosite: 'https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geosite.dat'
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+
+dns:
+  enable: true
+  prefer-h3: true
+  listen: 0.0.0.0:1053
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 28.0.0.1/8
+  fake-ip-filter:
+    - "*"
+    - +.lan
+  default-nameserver:
+    - 223.5.5.5
+    - 223.6.6.6
+  nameserver:
+    - https://223.5.5.5/dns-query
+    - https://223.6.6.6/dns-query
+
+# 锚点 - 节点筛选
+FilterHK: &FilterHK '^(?=.*((?i)🇭🇰|香港|(\b(HK|HKG|Hong)(\d+)?\b))).*$'
+FilterTW: &FilterTW '^(?=.*((?i)🇹🇼|台湾|(\b(TW|TWN|Tai|Taiwan)(\d+)?\b))).*$'
+FilterUS: &FilterUS '^(?=.*((?i)🇺🇸|美国|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|(\b(US|USA|United States)(\d+)?\b))).*$'
+FilterUK: &FilterUK '^(?=.*((?i)🇬🇧|英国|伦敦|(\b(UK|GBR|United Kingdom)(\d+)?\b))).*$'
+FilterJP: &FilterJP '^(?=.*((?i)🇯🇵|日本|川日|东京|大阪|泉日|埼玉|(\b(JP|JPN|Japan)(\d+)?\b))).*$'
+FilterKR: &FilterKR '^(?=.*((?i)🇰🇷|韩国|韓|首尔|(\b(KR|KOR|Korea)(\d+)?\b))).*$'
+FilterSG: &FilterSG '^(?=.*((?i)🇸🇬|新加坡|狮|(\b(SG|SGP|Singapore)(\d+)?\b))).*$'
+FilterUN: &FilterUN '^(?=.*(.))(?!.*((?i)群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|超时|收藏|福利|邀请|好友|失联|(\b(USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|Traffic)(\d+)?\b|(\d{4}-\d{2}-\d{2}|\dG)))).*$'
+
+# 锚点 - 自动选择 [每 6 秒一次惰性健康检查，容差 20ms，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
+UrlTest: &UrlTest {type: url-test, interval: 6, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
+# 锚点 - 故障转移 [每 6 秒一次惰性健康检查，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
+FallBack: &FallBack {type: fallback, interval: 6, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
+# 锚点 - 负载均衡 [每 6 秒一次惰性健康检查，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
+LoadBalance: &LoadBalance {type: load-balance, interval: 6, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, strategy: consistent-hashing, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
+
+# 策略组
+proxy-groups: 
+  - {name: 手动选择, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN] }
+  - {name: 负载均衡, type: LoadBalance,proxies: [HK,TW,US,UK,JP,KR,SG,UN] }
+  - {name: 故障转移, type: fallback, proxies: [HK,TW,US,UK,JP,KR,SG,UN] }
+
+  - {name: HK, <<: *UrlTest, filter: *FilterHK}
+  - {name: TW, <<: *UrlTest, filter: *FilterTW}
+  - {name: US, <<: *UrlTest, filter: *FilterUS}
+  - {name: UK, <<: *UrlTest, filter: *FilterUK}
+  - {name: JP, <<: *UrlTest, filter: *FilterJP}
+  - {name: KR, <<: *UrlTest, filter: *FilterKR}
+  - {name: SG, <<: *UrlTest, filter: *FilterSG}
+  - {name: UN, <<: *UrlTest, filter: *FilterFR}
+
+rules:
+
+  - DOMAIN-SUFFIX,services.googleapis.cn,节点选择
+  - DOMAIN-SUFFIX,xn--ngstr-ira8j.com,节点选择
+  - DOMAIN-SUFFIX,services.googleapis.com,节点选择
+  
+  - GEOSITE,microsoft@cn,DIRECT
+  - GEOSITE,apple,DIRECT
+  - GEOSITE,category-games@cn,DIRECT
+  - GEOSITE,cn,DIRECT
+  - GEOIP,cn,DIRECT
+  - GEOSITE,private,DIRECT
+  - GEOIP,private,DIRECT
+  - MATCH,节点选择
