@@ -60,10 +60,10 @@ RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yam
 #节点过滤 []
 Filter-HK: &Filter-HK '香港|HK|HongKong'
 Filter-TW: &Filter-TW '台湾|TW|Taiwan'
-Filter-US: &Filter-US '美国|US|United States|America'
-Filter-UK: &Filter-UK '英国|UK|United Kingdom|England'
+Filter-US: &Filter-US '美国|US|America'
+Filter-UK: &Filter-UK '英国|UK|England'
 Filter-JP: &Filter-JP '日本|JP|Japan'
-Filter-KR: &Filter-KR '韩国|KR|Korean'
+Filter-KR: &Filter-KR '韩国|KR|Korea'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
 # ======= 静态节点 =======
 
