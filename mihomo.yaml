@@ -71,7 +71,7 @@ proxy-groups:
   - {name: Select, type: select, proxies: [All,Auto,HK,TW,US,UK,JP,KR,SG,UN] }
   - {name: Fallback, type: fallback, proxies: [HK,TW,US,UK,JP,KR,SG,UN] }
 
-  - {name: All,  <<: *UrlTest,, include-all: true }
+  - {name: All,  <<: *UrlTest, include-all: true }
   
   - {name: HK, <<: *UrlTest, filter: *FilterHK, include-all: true}
   - {name: TW, <<: *UrlTest, filter: *FilterTW, include-all: true}
