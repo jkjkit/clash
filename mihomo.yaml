@@ -68,9 +68,10 @@ FallBack: &FallBack {type: fallback, interval: 6, lazy: true, url: 'http://www.g
 
 # 策略组
 proxy-groups: 
-  - {name: 手动选择, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN] }
+  - {name: 手动选择, type: select, proxies: [Select,DIRECT,HK,TW,US,UK,JP,KR,SG,UN] }
   - {name: 故障转移, type: fallback, proxies: [HK,TW,US,UK,JP,KR,SG,UN] }
-
+  - {name: Select, type: select, include-all: true}
+  
   - {name: HK, <<: *UrlTest, filter: *FilterHK, include-all: true}
   - {name: TW, <<: *UrlTest, filter: *FilterTW, include-all: true}
   - {name: US, <<: *UrlTest, filter: *FilterUS, include-all: true}
@@ -82,9 +83,9 @@ proxy-groups:
 
 rules:
 
-  - DOMAIN-SUFFIX,services.googleapis.cn,节点选择
-  - DOMAIN-SUFFIX,xn--ngstr-ira8j.com,节点选择
-  - DOMAIN-SUFFIX,services.googleapis.com,节点选择
+  - DOMAIN-SUFFIX,services.googleapis.cn,手动选择
+  - DOMAIN-SUFFIX,xn--ngstr-ira8j.com,手动选择
+  - DOMAIN-SUFFIX,services.googleapis.com,手动选择
   
   - GEOSITE,microsoft@cn,DIRECT
   - GEOSITE,apple,DIRECT
@@ -93,4 +94,4 @@ rules:
   - GEOIP,cn,DIRECT
   - GEOSITE,private,DIRECT
   - GEOIP,private,DIRECT
-  - MATCH,节点选择
+  - MATCH,手动选择
