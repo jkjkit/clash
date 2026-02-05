@@ -59,7 +59,7 @@ FilterUK: &FilterUK '英国|UK|England'
 FilterJP: &FilterJP '日本|JP|Japan'
 FilterKR: &FilterKR '韩国|KR|Korea'
 FilterSG: &FilterSG '新加坡|SG|Singapore'
-# FilterUN: &FilterUN '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|America|英国|UK|England|日本|JP|Japan|韩国|KR|Korea|新加坡|SG|Singapore)).*$'
+FilterUN: &FilterUN '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|America|英国|UK|England|日本|JP|Japan|韩国|KR|Korea|新加坡|SG|Singapore)).*$'
 
 # 锚点 - 自动选择 [每 6 秒一次惰性健康检查，容差 20ms，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
 UrlTest: &UrlTest {type: url-test, interval: 6, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
@@ -70,18 +70,18 @@ Balance: &Balance {type: load-balance, interval: 6, lazy: true, url: 'http://www
 
 # 策略组
 proxy-groups: 
-  - {name: 手动选择, type: select, proxies: [HK,TW,US,UK,JP,KR,SG] }
-  - {name: 负载均衡, type: Balance,proxies: [HK,TW,US,UK,JP,KR,SG] }
-  - {name: 故障转移, type: fallback, proxies: [HK,TW,US,UK,JP,KR,SG] }
+  - {name: 手动选择, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN] }
+  - {name: 负载均衡, type: Balance,proxies: [HK,TW,US,UK,JP,KR,SG,UN] }
+  - {name: 故障转移, type: fallback, proxies: [HK,TW,US,UK,JP,KR,SG,UN] }
 
-  - {name: HK, <<: *UrlTest, filter: *FilterHK}
-  - {name: TW, <<: *UrlTest, filter: *FilterTW}
-  - {name: US, <<: *UrlTest, filter: *FilterUS}
-  - {name: UK, <<: *UrlTest, filter: *FilterUK}
-  - {name: JP, <<: *UrlTest, filter: *FilterJP}
-  - {name: KR, <<: *UrlTest, filter: *FilterKR}
-  - {name: SG, <<: *UrlTest, filter: *FilterSG}
-#  - {name: UN, <<: *UrlTest, filter: *FilterUN}
+  - {name: HK, <<: *UrlTest, filter: *FilterHK, include-all: true}
+  - {name: TW, <<: *UrlTest, filter: *FilterTW, include-all: true}
+  - {name: US, <<: *UrlTest, filter: *FilterUS, include-all: true}
+  - {name: UK, <<: *UrlTest, filter: *FilterUK, include-all: true}
+  - {name: JP, <<: *UrlTest, filter: *FilterJP, include-all: true}
+  - {name: KR, <<: *UrlTest, filter: *FilterKR, include-all: true}
+  - {name: SG, <<: *UrlTest, filter: *FilterSG, include-all: true}
+  - {name: UN, <<: *UrlTest, filter: *FilterUN, include-all: true}
 
 rules:
 
