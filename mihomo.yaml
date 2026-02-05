@@ -85,9 +85,9 @@ proxy-groups:
 
 rules:
 
-  - DOMAIN-SUFFIX,services.googleapis.cn,手动选择
-  - DOMAIN-SUFFIX,xn--ngstr-ira8j.com,手动选择
-  - DOMAIN-SUFFIX,services.googleapis.com,手动选择
+  - DOMAIN-SUFFIX,services.googleapis.cn,Select
+  - DOMAIN-SUFFIX,xn--ngstr-ira8j.com,Select
+  - DOMAIN-SUFFIX,services.googleapis.com,Select
   
   - GEOSITE,microsoft@cn,DIRECT
   - GEOSITE,apple,DIRECT
@@ -96,4 +96,4 @@ rules:
   - GEOIP,cn,DIRECT
   - GEOSITE,private,DIRECT
   - GEOIP,private,DIRECT
-  - MATCH,手动选择
+  - MATCH,Select
