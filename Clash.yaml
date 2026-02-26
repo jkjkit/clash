@@ -68,11 +68,10 @@ Filter-SG: &Filter-SG '新加坡|SG|Singapore'
 # ======= 静态节点 =======
 
 proxies:
-
-    - {name: usa, type: anytls, server: 152.53.54.139, port: 36001, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, sni: hk.zongyunti.site, skip-cert-verify: true, client-fingerprint: chrome, alpn: [h2, http/1.1], udp: true}
-    - {name: usb, type: hysteria2, server: 81.31.232.60, port: 36002, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, obfs: salamander, obfs-password: ODczNTFlNmQ0YWVlZGUzOQ==, sni: hk1.zongyunti.site, skip-cert-verify: true, udp: true}
-    - {name: usc, type: hysteria2, server: 152.53.54.167, port: 36002, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, obfs: salamander, obfs-password: ODczNTFlNmQ0YWVlZGUzOQ==, sni: hk1.zongyunti.site, skip-cert-verify: true, udp: true}
-    - {name: usd, type: hysteria2, server: 152.53.54.139, port: 36002, password: 175224f5-1318-41a1-9b66-ca2eb9dd8f7e, sni: hk1.zongyunti.site, skip-cert-verify: true, udp: true}
+    - { name: "usa", type: hysteria2, server: 34.96.136.44, port: 55555, password: e3a5bb40be52de65, udp: true, skip-cert-verify: true, sni: apps.apple.com }
+    - { name: "usb", type: vless, server: 34.96.136.44, port: 22233, udp: true, uuid: c3bb3f88-b00d-4c00-b01e-60afc3816262, tls: true, sni: apps.apple.com, skip-cert-verify: true, client_fingerprint: chrome, flow: xtls-rprx-vision }
+    - { name: "usc", type: hysteria2, server: 35.229.193.80, port: 55555, password: e3a5bb40be52de65, udp: true, skip-cert-verify: true, sni: apps.apple.com }
+    - { name: "usd", type: vless, server: 35.229.193.80, port: 22233, udp: true, uuid: 2ed93971-7824-4581-93bc-a5ef22a56ac5, tls: true, sni: apps.apple.com, skip-cert-verify: true, client_fingerprint: chrome, flow: xtls-rprx-vision }
 
 # ======= 订阅节点 =======
 proxy-providers:
