@@ -66,14 +66,15 @@ UrlTest: &UrlTest {type: url-test, interval: 6, tolerance: 20, lazy: true, url: 
 # 锚点 - 故障转移 [每 6 秒一次惰性健康检查，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
 FallBack: &FallBack {type: fallback, interval: 6, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
 
+proxies:
+  
 # 策略组
 proxy-groups: 
-  - {name: Select, type: select, proxies: [All,Auto,HK,TW,US,UK,JP,KR,SG,UN] }
-  - {name: Fallback, type: fallback, proxies: [HK,TW,US,UK,JP,KR,SG,UN] }
-  
+  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,DIRECT,Select,Static]}
   - {name: All,  type: select, include-all: true }
-  - {name: Auto,  <<: *UrlTest, include-all: true }
-  
+  - {name: Static, type: load-balance, proxies: [usa,usb,usc,usd]}
+
+  - {name: All,  type: select, include-all: true }
   - {name: HK, <<: *UrlTest, filter: *FilterHK, include-all: true}
   - {name: TW, <<: *UrlTest, filter: *FilterTW, include-all: true}
   - {name: US, <<: *UrlTest, filter: *FilterUS, include-all: true}
@@ -81,19 +82,113 @@ proxy-groups:
   - {name: JP, <<: *UrlTest, filter: *FilterJP, include-all: true}
   - {name: KR, <<: *UrlTest, filter: *FilterKR, include-all: true}
   - {name: SG, <<: *UrlTest, filter: *FilterSG, include-all: true}
-  - {name: UN, <<: *UrlTest, filter: *FilterUN, include-all: true}
+
+rule-providers:
+  reject:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
+    path: ./ruleset/reject.yaml
+    interval: 86400
+
+  icloud:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/icloud.txt"
+    path: ./ruleset/icloud.yaml
+    interval: 86400
+
+  apple:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/apple.txt"
+    path: ./ruleset/apple.yaml
+    interval: 86400
+
+  google:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt"
+    path: ./ruleset/google.yaml
+    interval: 86400
+
+  proxy:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt"
+    path: ./ruleset/proxy.yaml
+    interval: 86400
+
+  direct:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
+    path: ./ruleset/direct.yaml
+    interval: 86400
+
+  private:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt"
+    path: ./ruleset/private.yaml
+    interval: 86400
+
+  gfw:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt"
+    path: ./ruleset/gfw.yaml
+    interval: 86400
+
+  tld-not-cn:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
+    path: ./ruleset/tld-not-cn.yaml
+    interval: 86400
+
+  telegramcidr:
+    type: http
+    behavior: ipcidr
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt"
+    path: ./ruleset/telegramcidr.yaml
+    interval: 86400
+
+  cncidr:
+    type: http
+    behavior: ipcidr
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/cncidr.txt"
+    path: ./ruleset/cncidr.yaml
+    interval: 86400
+
+  lancidr:
+    type: http
+    behavior: ipcidr
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt"
+    path: ./ruleset/lancidr.yaml
+    interval: 86400
+
+  applications:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
+    path: ./ruleset/applications.yaml
+    interval: 86400
 
 rules:
-
-  - DOMAIN-SUFFIX,services.googleapis.cn,Select
-  - DOMAIN-SUFFIX,xn--ngstr-ira8j.com,Select
-  - DOMAIN-SUFFIX,services.googleapis.com,Select
-  
-  - GEOSITE,microsoft@cn,DIRECT
-  - GEOSITE,apple,DIRECT
-  - GEOSITE,category-games@cn,DIRECT
-  - GEOSITE,cn,DIRECT
-  - GEOIP,cn,DIRECT
-  - GEOSITE,private,DIRECT
-  - GEOIP,private,DIRECT
-  - MATCH,Select
+  - RULE-SET,applications,DIRECT
+  - DOMAIN,clash.razord.top,DIRECT
+  - DOMAIN,yacd.haishan.me,DIRECT
+  - RULE-SET,private,DIRECT
+  - RULE-SET,reject,REJECT
+  - RULE-SET,icloud,DIRECT
+  - RULE-SET,apple,DIRECT
+  - RULE-SET,google,PROXY
+  - RULE-SET,proxy,PROXY
+  - RULE-SET,direct,DIRECT
+  - RULE-SET,lancidr,DIRECT
+  - RULE-SET,cncidr,DIRECT
+  - RULE-SET,telegramcidr,PROXY
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,PROXY
