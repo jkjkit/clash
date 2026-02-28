@@ -1,6 +1,7 @@
-# Clash 配置模板
+# 标准版-按场景分流
 port: 7890
 socks-port: 7891
+
 allow-lan: true
 mode: rule
 log-level: info
@@ -16,13 +17,23 @@ tcp-concurrent: true
 find-process-mode: strict
 global-client-fingerprint: chrome
 
-external-controller: 0.0.0.0:9090
+geox-url:
+  geoip: 'https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geoip.dat'
+  geosite: 'https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geosite.dat'
+
+profile:
+  store-selected: true
+  store-fake-ip: true
 
 sniffer:
   enable: true
   force-dns-mapping: true
   parse-pure-ip: true
   override-destination: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
 
 dns:
   enable: true
@@ -32,13 +43,8 @@ dns:
   enhanced-mode: fake-ip
   fake-ip-range: 28.0.0.1/8
   fake-ip-filter:
-  - "*.lan"
-  - "*.local"
-  - localhost.ptlogin2.qq.com
-  - +.srv.nintendo.net
-  - +.stun.playstation.net
-  - +.msftconnecttest.com
-  - +.msftncsi.com
+    - "*"
+    - +.lan
   default-nameserver:
     - 223.5.5.5
     - 223.6.6.6
@@ -55,9 +61,9 @@ pr: &pr {type: http, interval: 86400, health-check: {enable: true, interval: 60,
 failover: &failover {type: fallback, lazy: true, interval: 10, url: "http://www.gstatic.com/generate_204", timeout: 3000, max-failed-times: 3, hidden: true, include-all-providers: true}
 
 #规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
-RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yaml, proxy: Proxy}
+RuleSet: &RuleSet {type: http, interval: 86400, format: yaml, proxy: Proxy}
 
-#节点过滤 [按地区区分]
+#节点过滤 [按地区筛选]
 Filter-HK: &Filter-HK '香港|HK|HongKong'
 Filter-TW: &Filter-TW '台湾|TW|Taiwan'
 Filter-US: &Filter-US '美国|US|America'
@@ -90,40 +96,99 @@ proxy-groups:
   - {name: KR, <<: *failover, filter: *Filter-KR}
   - {name: SG, <<: *failover, filter: *Filter-SG}  
 
-# ======= 规则集 =======
 rule-providers:
-#广告拦截
   reject:
     <<: *RuleSet
+    behavior: domain
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
-    path: ./profiles/rules/reject.txt
-#代理列表  
+    path: /profiles/rules/reject.txt
+
+  icloud:
+    <<: *RuleSet
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/icloud.txt"
+    path: /profiles/rules/icloud.txt
+
+  apple:
+    <<: *RuleSet
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/apple.txt"
+    path: /profiles/rules/apple.txt
+
+  google:
+    <<: *RuleSet
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt"
+    path: /profiles/rules/google.txt
+
   proxy:
     <<: *RuleSet
+    behavior: domain
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt"
-    path: ./profiles/rules/proxy.txt
-#直连列表
+    path: /profiles/rules/proxy.txt
+
   direct:
     <<: *RuleSet
+    behavior: domain
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
-    path: ./profiles/rules/direct.txt
-#大陆地址
+    path: /profiles/rules/direct.txt
+
+  private:
+    <<: *RuleSet
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt"
+    path: /profiles/rules/private.txt
+
+  gfw:
+    <<: *RuleSet
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt"
+    path: /profiles/rules/gfw.txt
+
+  tld-not-cn:
+    <<: *RuleSet
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt"
+    path: /profiles/rules/tld-not-cn.txt
+
+  telegramcidr:
+    <<: *RuleSet
+    behavior: ipcidr
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt"
+    path: /profiles/rules/telegramcidr.txt
+
   cncidr:
     <<: *RuleSet
+    behavior: ipcidr
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/cncidr.txt"
-    path: ./profiles/rules/cncidr.txt
-#软件列表
+    path: /profiles/rules/cncidr.txt
+
+  lancidr:
+    <<: *RuleSet
+    behavior: ipcidr
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt"
+    path: /profiles/rules/lancidr.txt
+
   applications:
     <<: *RuleSet
+    behavior: classical
     url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
-    path: ./profiles/rules/applications.txt
+    path: /profiles/rules/applications.txt
 
-# ======= 规则 =======
 rules:
-  - RULE-SET,reject,REJECT
-  - RULE-SET,proxy,Proxy
-  - RULE-SET,cncidr,DIRECT
   - RULE-SET,applications,DIRECT
-  - RULE-SET,direct,DIRECT  
+  - DOMAIN,clash.razord.top,DIRECT
+  - DOMAIN,yacd.haishan.me,DIRECT
+  - RULE-SET,private,DIRECT
+#  - RULE-SET,reject,REJECT
+  - RULE-SET,icloud,DIRECT
+  - RULE-SET,apple,DIRECT
+  - RULE-SET,google,Proxy
+  - RULE-SET,proxy,Proxy
+  - RULE-SET,direct,DIRECT
+  - RULE-SET,lancidr,DIRECT
+  - RULE-SET,cncidr,DIRECT
+  - RULE-SET,telegramcidr,Proxy
+  - GEOIP,LAN,DIRECT
   - GEOIP,CN,DIRECT
   - MATCH,Proxy
