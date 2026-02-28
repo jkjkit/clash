@@ -174,7 +174,8 @@ proxy-groups:
     filter: "^((?!(直连|拒绝)).)*$"
 
   - name: 所有-智选
-    type: smart
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
     include-all: true
     policy-priority: "香港:1.2;牛逼:0.8"
     uselightgbm: true
@@ -198,7 +199,8 @@ proxy-groups:
     filter: "(?=.*(广港|香港|HK|Hong Kong|🇭🇰|HongKong)).*$"
     
   - name: 香港-智选
-    type: smart
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
     include-all: true
     policy-priority: "牛逼:0.8"
     uselightgbm: true
@@ -220,7 +222,8 @@ proxy-groups:
     include-all: true
     filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$"
   - name: 台湾-智选
-    type: smart
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
     include-all: true
     policy-priority: "牛逼:0.8"
     uselightgbm: true
@@ -242,7 +245,8 @@ proxy-groups:
     include-all: true
     filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)).*$"
   - name: 日本-智选
-    type: smart
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
     include-all: true
     policy-priority: "牛逼:0.8"
     uselightgbm: true
@@ -264,7 +268,8 @@ proxy-groups:
     include-all: true
     filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$"
   - name: 新加坡-智选
-    type: smart
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
     include-all: true
     policy-priority: "牛逼:0.8"
     uselightgbm: true
@@ -286,7 +291,8 @@ proxy-groups:
     include-all: true
     filter: "(?=.*(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)).*$"
   - name: 韩国-智选
-    type: smart
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
     include-all: true
     policy-priority: "牛逼:0.8"
     uselightgbm: true
@@ -308,7 +314,8 @@ proxy-groups:
     include-all: true
     filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)).*$"
   - name: 美国-智选
-    type: smart
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
     include-all: true
     policy-priority: "牛逼:0.8"
     uselightgbm: true
@@ -330,7 +337,8 @@ proxy-groups:
     include-all: true
     filter: "(?=.*(英国|英|伦敦|UK|United Kingdom|🇬🇧|London)).*$"
   - name: 英国-智选
-    type: smart
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
     include-all: true
     policy-priority: "牛逼:0.8"
     uselightgbm: true
@@ -352,7 +360,8 @@ proxy-groups:
     include-all: true
     filter: "^((?!(直连|拒绝|广港|香港|HK|Hong Kong|🇭🇰|HongKong|广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|广新|新加坡|SG|坡|狮城|🇸🇬|Singapore|广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea|广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States|英国|UK|United Kingdom|伦敦|英|London|🇬🇧)).)*$"
   - name: 其他-智选
-    type: smart
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
     include-all: true
     policy-priority: "牛逼:0.8"
     uselightgbm: true
