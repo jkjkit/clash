@@ -65,7 +65,7 @@ Filter-UK: &Filter-UK '英国|UK|England'
 Filter-JP: &Filter-JP '日本|JP|Japan'
 Filter-KR: &Filter-KR '韩国|KR|Korea'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
-Filter-UN: &Filter-UN '新加坡|SG|Singapore'
+Filter-UN: &Filter-UN '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|America|英国|UK|England|日本|JP|Japan|韩国|KR|Korea|新加坡|SG|Singapore)).*$'
 # ======= 静态节点 =======
 
 proxies:
@@ -100,28 +100,18 @@ rule-providers:
 #广告拦截
   reject:
     <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
+    url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Reject.txt"
     path: ./profiles/rules/reject.txt
 #代理列表  
   proxy:
     <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt"
+    url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Proxy.txt"
     path: ./profiles/rules/proxy.txt
 #直连列表
   direct:
     <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt"
+    url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Direct.txt"
     path: ./profiles/rules/direct.txt
-#大陆地址
-  cncidr:
-    <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/cncidr.txt"
-    path: ./profiles/rules/cncidr.txt
-#软件列表
-  applications:
-    <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
-    path: ./profiles/rules/applications.txt
 
 # ======= 规则 =======
 rules:
