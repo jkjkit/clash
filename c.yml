@@ -45,16 +45,19 @@ dns:
 
 # ======= 锚点定义 =======
 
-#节点检测 [每24小时更新一次订阅节点，每 60 秒一次健康检查]
+# 锚点 - 节点检测 [每24小时更新一次订阅节点，每 60 秒一次健康检查]
 pr: &pr {type: http, interval: 86400, health-check: {enable: true, interval: 60, url: "http://www.gstatic.com/generate_204"}}
 
-#故障转移 [每 10 秒一次惰性健康检查，时延超过 3 秒判定为失败，失败 3 次则自动触发健康检查]
-failover: &failover {type: fallback, lazy: true, interval: 10, url: "http://www.gstatic.com/generate_204", timeout: 3000, max-failed-times: 3, hidden: true, include-all-providers: true}
+# 锚点 - 自动选择 [每 6 秒一次惰性健康检查，容差 20ms，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
+at: &at {type: url-test, interval: 300, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
 
-#规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
+# 锚点 - 故障转移 [每 6 秒一次惰性健康检查，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
+fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
+
+# 规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
 RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yaml, proxy: Proxy}
 
-# 节点过滤关键词 
+# 节点关键词过滤
 Filter-HK: &Filter-HK '香港|HK|HongKong'
 Filter-TW: &Filter-TW '台湾|TW|Taiwan'
 Filter-US: &Filter-US '美国|US|America'
@@ -62,7 +65,6 @@ Filter-UK: &Filter-UK '英国|UK|England'
 Filter-JP: &Filter-JP '日本|JP|Japan'
 Filter-KR: &Filter-KR '韩国|KR|Korea'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
-Filter-UN: &Filter-UN '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|America|英国|UK|England|日本|JP|Japan|韩国|KR|Korea|新加坡|SG|Singapore)).*$'
 
 # ======= 订阅节点 =======
 proxy-providers:
@@ -73,21 +75,21 @@ proxy-providers:
 
 # ======= 策略组 =======
 proxy-groups:
-
-  - {name: 选择地区, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN]}
-  - {name: 全部节点, type: select, use: [Sub]}  
-  - {name: 广告拦截, type: select, proxies: [REJECT, DIRECT]}
-  - {name: 兜底策略, type: select, proxies: [选择地区, 全部节点, DIRECT]}
-  
-
-  - {name: HK, <<: *failover, use: [Sub], filter: *Filter-HK}
-  - {name: TW, <<: *failover, use: [Sub], filter: *Filter-TW}
-  - {name: US, <<: *failover, use: [Sub], filter: *Filter-US}
-  - {name: UK, <<: *failover, use: [Sub], filter: *Filter-UK}  
-  - {name: JP, <<: *failover, use: [Sub], filter: *Filter-JP}
-  - {name: KR, <<: *failover, use: [Sub], filter: *Filter-KR}
-  - {name: SG, <<: *failover, use: [Sub], filter: *Filter-SG}
-  - {name: UN, <<: *failover, use: [Sub], filter: *Filter-UN}
+#显示地区节点/订阅节点/静态节点
+  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN]}
+  - {name: Select, type: select, use: [Sub]}
+  - {name: Static, type: select, include-all: true}
+#隐藏广告拦截/兜底策略
+  - {name: Reject, type: select, proxies: [REJECT, DIRECT], hidden: true}
+  - {name: Match, type: select, proxies: [Proxy, Select, DIRECT], hidden: true}
+#过滤设置
+  - {name: HK, <<: *at, filter: *Filter-HK}
+  - {name: TW, <<: *at, filter: *Filter-TW}
+  - {name: US, <<: *at, filter: *Filter-US}
+  - {name: UK, <<: *at, filter: *Filter-UK}
+  - {name: JP, <<: *at, filter: *Filter-JP}
+  - {name: KR, <<: *at, filter: *Filter-KR}
+  - {name: SG, <<: *at, filter: *Filter-SG}
   
 # ======= 规则集 =======
 
@@ -110,8 +112,8 @@ rule-providers:
 
 # ======= 规则 =======
 rules:
-  - RULE-SET,reject,广告拦截
-  - RULE-SET,proxy,选择地区
+  - RULE-SET,reject,Reject
+  - RULE-SET,proxy,Proxy
   - RULE-SET,direct,DIRECT  
-  - GEOIP,CN,DIRECT
-  - MATCH,兜底策略
+  - GEOIP,CN,DIRECT,no-resolve
+  - MATCH,Match
