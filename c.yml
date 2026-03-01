@@ -111,9 +111,11 @@ rule-providers:
     path: ./profiles/rules/direct.txt
 
 # ======= 规则 =======
+
 rules:
   - RULE-SET,reject,Reject
   - RULE-SET,proxy,Proxy
-  - RULE-SET,direct,DIRECT  
+  - RULE-SET,direct,DIRECT
   - GEOIP,CN,DIRECT,no-resolve
+  - GEOIP,private,DIRECT,no-resolve
   - MATCH,Match
