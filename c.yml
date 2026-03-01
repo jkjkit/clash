@@ -86,28 +86,28 @@ proxy-groups:
   - {name: 广告拦截, type: select, proxies: [REJECT, DIRECT]}
   - {name: 兜底策略, type: select, proxies: [自动选择, 手动切换, DIRECT]}
   
-  - {name: HK, <<: *failover, filter: *Filter-HK}
-  - {name: TW, <<: *failover, filter: *Filter-TW}
-  - {name: US, <<: *failover, filter: *Filter-US}
-  - {name: UK, <<: *failover, filter: *Filter-UK}  
-  - {name: JP, <<: *failover, filter: *Filter-JP}
-  - {name: KR, <<: *failover, filter: *Filter-KR}
-  - {name: SG, <<: *failover, filter: *Filter-SG}
-  - {name: UN, <<: *failover, filter: *Filter-UN}
+  - {name: HK, <<: *pr, filter: *Filter-HK}
+  - {name: TW, <<: *pr, filter: *Filter-TW}
+  - {name: US, <<: *pr, filter: *Filter-US}
+  - {name: UK, <<: *pr, filter: *Filter-UK}  
+  - {name: JP, <<: *pr, filter: *Filter-JP}
+  - {name: KR, <<: *pr, filter: *Filter-KR}
+  - {name: SG, <<: *pr, filter: *Filter-SG}
+  - {name: UN, <<: *pr, filter: *Filter-UN}
 
 # ======= 规则集 =======
 rule-providers:
-#广告拦截
+#拦截
   reject:
     <<: *RuleSet
     url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Reject.txt"
     path: ./profiles/rules/reject.txt
-#代理列表  
+#代理
   proxy:
     <<: *RuleSet
     url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Proxy.txt"
     path: ./profiles/rules/proxy.txt
-#直连列表
+#直连
   direct:
     <<: *RuleSet
     url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Direct.txt"
@@ -115,11 +115,10 @@ rule-providers:
 
 # ======= 规则 =======
 rules:
-
-  - RULE-SET,reject,REJECT
-  - RULE-SET,proxy,Proxy
+  - RULE-SET,reject,广告拦截
+  - RULE-SET,proxy,手动切换
   - RULE-SET,cncidr,DIRECT
   - RULE-SET,applications,DIRECT
   - RULE-SET,direct,DIRECT  
   - GEOIP,CN,DIRECT
-  - MATCH,Proxy
+  - MATCH,手动切换
