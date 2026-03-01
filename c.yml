@@ -13,10 +13,7 @@ geodata-loader: standard
 geo-auto-update: true
 geo-update-interval: 24
 tcp-concurrent: true
-find-process-mode: strict
 global-client-fingerprint: chrome
-
-external-controller: 0.0.0.0:9090
 
 sniffer:
   enable: true
@@ -57,7 +54,7 @@ failover: &failover {type: fallback, lazy: true, interval: 10, url: "http://www.
 #规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
 RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yaml, proxy: Proxy}
 
-#节点过滤 []
+# 节点过滤关键词 
 Filter-HK: &Filter-HK '香港|HK|HongKong'
 Filter-TW: &Filter-TW '台湾|TW|Taiwan'
 Filter-US: &Filter-US '美国|US|America'
@@ -66,35 +63,30 @@ Filter-JP: &Filter-JP '日本|JP|Japan'
 Filter-KR: &Filter-KR '韩国|KR|Korea'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
 Filter-UN: &Filter-UN '^(?!.*(香港|HK|HongKong|台湾|TW|Taiwan|美国|US|America|英国|UK|England|日本|JP|Japan|韩国|KR|Korea|新加坡|SG|Singapore)).*$'
-# ======= 静态节点 =======
-
-proxies:
-    - { name: "usa", type: hysteria2, server: 34.96.136.44, port: 55555, password: e3a5bb40be52de65, udp: true, skip-cert-verify: true, sni: apps.apple.com }
 
 # ======= 订阅节点 =======
 proxy-providers:
   Sub:
     <<: *pr
-    url: "订阅链接"
+    url: "https://jsjc.cfd/api/v1/client/subscribe?token=2fd8fff8c8b89cd3118e9fc3f1d2d767"
     path: ./profiles/proxies/subscription.yaml
 
 # ======= 策略组 =======
 proxy-groups:
-
-  - {name: 自动选择, type: url-test, use: [HK,TW,US,UK,JP,KR,SG,UN], url: http://www.gstatic.com/generate_204, interval: 300}
-  - {name: 手动切换, type: select, use: [Sub]}
+  - {name: 选择地区, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN]}
+  - {name: 全部节点, type: select, use: [Sub]}  
   - {name: 广告拦截, type: select, proxies: [REJECT, DIRECT]}
-  - {name: 兜底策略, type: select, proxies: [自动选择, 手动切换, DIRECT]}
+  - {name: 兜底策略, type: select, proxies: [选择地区, 全部节点, DIRECT]}
   
-  - {name: HK, <<: *pr, filter: *Filter-HK}
-  - {name: TW, <<: *pr, filter: *Filter-TW}
-  - {name: US, <<: *pr, filter: *Filter-US}
-  - {name: UK, <<: *pr, filter: *Filter-UK}  
-  - {name: JP, <<: *pr, filter: *Filter-JP}
-  - {name: KR, <<: *pr, filter: *Filter-KR}
-  - {name: SG, <<: *pr, filter: *Filter-SG}
-  - {name: UN, <<: *pr, filter: *Filter-UN}
-
+  # 2. 地区分流
+  - {name: HK, <<: *failover, use: [Sub], filter: *Filter-HK}
+  - {name: TW, <<: *failover, use: [Sub], filter: *Filter-TW}
+  - {name: US, <<: *failover, use: [Sub], filter: *Filter-US}
+  - {name: UK, <<: *failover, use: [Sub], filter: *Filter-UK}  
+  - {name: JP, <<: *failover, use: [Sub], filter: *Filter-JP}
+  - {name: KR, <<: *failover, use: [Sub], filter: *Filter-KR}
+  - {name: SG, <<: *failover, use: [Sub], filter: *Filter-SG}
+  - {name: UN, <<: *failover, use: [Sub], filter: *Filter-UN}
 # ======= 规则集 =======
 rule-providers:
 #拦截
@@ -116,9 +108,7 @@ rule-providers:
 # ======= 规则 =======
 rules:
   - RULE-SET,reject,广告拦截
-  - RULE-SET,proxy,手动切换
-  - RULE-SET,cncidr,DIRECT
-  - RULE-SET,applications,DIRECT
+  - RULE-SET,proxy,选择地区
   - RULE-SET,direct,DIRECT  
   - GEOIP,CN,DIRECT
-  - MATCH,手动切换
+  - MATCH,兜底策略
