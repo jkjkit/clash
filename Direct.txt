@@ -1,65 +1,70 @@
 payload:
 #冷门
-  - DOMAIN-SUFFIX,061899.xyz,DIRECT
-  - DOMAIN-SUFFIX,bkpcp.top,DIRECT
-
+  - DOMAIN-SUFFIX,061899.xyz
+  - DOMAIN-SUFFIX,bkpcp.top
+  - DOMAIN-SUFFIX,52pojie.cn
+  - DOMAIN-SUFFIX,423down.com
+  - DOMAIN-SUFFIX,ghxi.com
+  - DOMAIN-SUFFIX,fy6b.com
+  - DOMAIN-SUFFIX,tmioe.com
+  - DOMAIN-SUFFIX,haikuoshijie.cn
 
 #热门
-  - DOMAIN-SUFFIX,soso.com,DIRECT
-  - DOMAIN-SUFFIX,360.com,DIRECT
-  - DOMAIN-SUFFIX,baidu.com,DIRECT
-  - DOMAIN-SUFFIX,qq.com,DIRECT
-  - DOMAIN-SUFFIX,zhihu.com,DIRECT
-  - DOMAIN-SUFFIX,douban.com,DIRECT
-  - DOMAIN-SUFFIX,xiaohongshu.com,DIRECT
-  - DOMAIN-SUFFIX,yuque.com,DIRECT
-  - DOMAIN-SUFFIX,sina.com,DIRECT
-  - DOMAIN-SUFFIX,weibo.com,DIRECT
-  - DOMAIN-SUFFIX,weibo.cn,DIRECT
-  - DOMAIN-SUFFIX,toutiao.com,DIRECT
+  - DOMAIN-SUFFIX,soso.com
+  - DOMAIN-SUFFIX,360.com
+  - DOMAIN-SUFFIX,baidu.com
+  - DOMAIN-SUFFIX,qq.com
+  - DOMAIN-SUFFIX,zhihu.com
+  - DOMAIN-SUFFIX,douban.com
+  - DOMAIN-SUFFIX,xiaohongshu.com
+  - DOMAIN-SUFFIX,yuque.com
+  - DOMAIN-SUFFIX,sina.com
+  - DOMAIN-SUFFIX,weibo.com
+  - DOMAIN-SUFFIX,weibo.cn
+  - DOMAIN-SUFFIX,toutiao.com
 
-  - DOMAIN-SUFFIX,live.com,DIRECT
+  - DOMAIN-SUFFIX,live.com
 
-  - DOMAIN-SUFFIX,qwen.ai,DIRECT
-  - DOMAIN-SUFFIX,deepseek.com,DIRECT
-  - DOMAIN-SUFFIX,qwen.ai,DIRECT
-  - DOMAIN-SUFFIX,chatglm.cn,DIRECT
+  - DOMAIN-SUFFIX,qwen.ai
+  - DOMAIN-SUFFIX,deepseek.com
+  - DOMAIN-SUFFIX,qwen.ai
+  - DOMAIN-SUFFIX,chatglm.cn
 
 #视频
-  - DOMAIN-SUFFIX,douyin.com,DIRECT
-  - DOMAIN-SUFFIX,youku.com,DIRECT
-  - DOMAIN-SUFFIX,iqiyi.com,DIRECT
-  - DOMAIN-SUFFIX,mgtv.com,DIRECT
-  - DOMAIN-SUFFIX,bilibili.com,DIRECT
+  - DOMAIN-SUFFIX,douyin.com
+  - DOMAIN-SUFFIX,youku.com
+  - DOMAIN-SUFFIX,iqiyi.com
+  - DOMAIN-SUFFIX,mgtv.com
+  - DOMAIN-SUFFIX,bilibili.com
 
 #网盘
-  - DOMAIN-SUFFIX,jianguoyun.com,DIRECT
-  - DOMAIN-SUFFIX,wenshushu.cn,DIRECT
-  - DOMAIN-SUFFIX,123pan.com,DIRECT
-  - DOMAIN-SUFFIX,feijipan.com,DIRECT
-  - DOMAIN-SUFFIX,woozooo.com,DIRECT
-  - DOMAIN-SUFFIX,lanzout.com,DIRECT
-  - DOMAIN-SUFFIX,alipan.com,DIRECT
-  - DOMAIN-SUFFIX,quark.cn,DIRECT
-  - DOMAIN-SUFFIX,4275.com,DIRECT
-  - DOMAIN-SUFFIX,fagedongxi.comi,DIRECT
+  - DOMAIN-SUFFIX,jianguoyun.com
+  - DOMAIN-SUFFIX,wenshushu.cn
+  - DOMAIN-SUFFIX,123pan.com
+  - DOMAIN-SUFFIX,feijipan.com
+  - DOMAIN-SUFFIX,woozooo.com
+  - DOMAIN-SUFFIX,lanzout.com
+  - DOMAIN-SUFFIX,alipan.com
+  - DOMAIN-SUFFIX,quark.cn
+  - DOMAIN-SUFFIX,4275.com
+  - DOMAIN-SUFFIX,fagedongxi.comi
 
 #网购
-  - DOMAIN-SUFFIX,taobao.com,DIRECT
-  - DOMAIN-SUFFIX,jd.com,DIRECT
-  - DOMAIN-SUFFIX,goofish.com,DIRECT
-  - DOMAIN-SUFFIX,vip.com,DIRECT
-  - DOMAIN-SUFFIX,1688.com,DIRECT
-  - DOMAIN-SUFFIX,pinduoduo.com,DIRECT
-  - DOMAIN-SUFFIX,,DIRECT
+  - DOMAIN-SUFFIX,taobao.com
+  - DOMAIN-SUFFIX,jd.com
+  - DOMAIN-SUFFIX,goofish.com
+  - DOMAIN-SUFFIX,vip.com
+  - DOMAIN-SUFFIX,1688.com
+  - DOMAIN-SUFFIX,pinduoduo.com
+  - DOMAIN-SUFFIX,
 #其它
-  - DOMAIN-SUFFIX,qireader.com,DIRECT
-  - DOMAIN-SUFFIX,rebang.today,DIRECT
-  - DOMAIN-SUFFIX,processon.com,DIRECT
-  - DOMAIN-SUFFIX,cli.im,DIRECT
-  - DOMAIN-SUFFIX,chinaz.com,DIRECT
-  - DOMAIN-SUFFIX,shorturl.at,DIRECT
-  - DOMAIN-SUFFIX,inboxes.com,DIRECT
-  - DOMAIN-SUFFIX,shz.al,DIRECT
-  - DOMAIN-SUFFIX,igdux.top,DIRECT
-  - DOMAIN-SUFFIX,paste.rs,DIRECT
+  - DOMAIN-SUFFIX,qireader.com
+  - DOMAIN-SUFFIX,rebang.today
+  - DOMAIN-SUFFIX,processon.com
+  - DOMAIN-SUFFIX,cli.im
+  - DOMAIN-SUFFIX,chinaz.com
+  - DOMAIN-SUFFIX,shorturl.at
+  - DOMAIN-SUFFIX,inboxes.com
+  - DOMAIN-SUFFIX,shz.al
+  - DOMAIN-SUFFIX,igdux.top
+  - DOMAIN-SUFFIX,paste.rs
