@@ -1,4 +1,4 @@
-# 自用版-按需求分流
+# 自用——按需求分流
 port: 7890
 socks-port: 7891
 allow-lan: true
@@ -13,6 +13,7 @@ geodata-loader: standard
 geo-auto-update: true
 geo-update-interval: 24
 tcp-concurrent: true
+find-process-mode: strict
 global-client-fingerprint: chrome
 
 sniffer:
@@ -57,7 +58,7 @@ fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/
 # 规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
 RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yaml, proxy: Proxy}
 
-# 节点关键词过滤
+#节点过滤 []
 Filter-HK: &Filter-HK '香港|HK|HongKong'
 Filter-TW: &Filter-TW '台湾|TW|Taiwan'
 Filter-US: &Filter-US '美国|US|America'
@@ -65,6 +66,13 @@ Filter-UK: &Filter-UK '英国|UK|England'
 Filter-JP: &Filter-JP '日本|JP|Japan'
 Filter-KR: &Filter-KR '韩国|KR|Korea'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
+# ======= 静态节点 =======
+
+proxies:
+  - { name: usa, type: vless, server: jp.111000.cc.cd, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
+  - { name: usb, type: vless, server: bestcf.030101.xyz, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
+  - { name: usc, type: vless, server: saas.sin.fan, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
+  - { name: usd, type: vless, server: freeyx.cloudflare88.eu.org, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
 
 # ======= 订阅节点 =======
 proxy-providers:
@@ -76,9 +84,9 @@ proxy-providers:
 # ======= 策略组 =======
 proxy-groups:
 #显示地区节点/订阅节点/静态节点
-  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN]}
+  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,DIRECT,Select,Static]}
   - {name: Select, type: select, use: [Sub]}
-  - {name: Static, type: select, include-all: true}
+  - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
 #隐藏广告拦截/兜底策略
   - {name: Reject, type: select, proxies: [REJECT, DIRECT], hidden: true}
   - {name: Match, type: select, proxies: [Proxy, Select, DIRECT], hidden: true}
@@ -90,9 +98,8 @@ proxy-groups:
   - {name: JP, <<: *at, filter: *Filter-JP}
   - {name: KR, <<: *at, filter: *Filter-KR}
   - {name: SG, <<: *at, filter: *Filter-SG}
-  
-# ======= 规则集 =======
 
+# ======= 规则集 =======
 rule-providers:
 
   reject:
@@ -113,9 +120,13 @@ rule-providers:
 # ======= 规则 =======
 
 rules:
+
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  
   - RULE-SET,reject,Reject
   - RULE-SET,proxy,Proxy
   - RULE-SET,direct,DIRECT
+  - GEOIP,private,DIRECT,no-resolve  
   - GEOIP,CN,DIRECT,no-resolve
-  - GEOIP,private,DIRECT,no-resolve
   - MATCH,Match
