@@ -1,4 +1,4 @@
-# 自用——按需求分流
+# Clash 配置模板
 port: 7890
 socks-port: 7891
 allow-lan: true
@@ -84,12 +84,12 @@ proxy-providers:
 # ======= 策略组 =======
 proxy-groups:
 #显示地区节点/订阅节点/静态节点
-  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,DIRECT,Select,Static]}
+  - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
   - {name: Select, type: select, use: [Sub]}
   - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
 #隐藏广告拦截/兜底策略
-  - {name: Reject, type: select, proxies: [REJECT, DIRECT], hidden: true}
-  - {name: Match, type: select, proxies: [Proxy, Select, DIRECT], hidden: true}
+  - {name: Reject, type: select, proxies: [REJECT], hidden: true}
+  - {name: Match, type: select, proxies: [Proxy,DIRECT], hidden: true}
 #过滤设置
   - {name: HK, <<: *at, filter: *Filter-HK}
   - {name: TW, <<: *at, filter: *Filter-TW}
@@ -117,16 +117,22 @@ rule-providers:
     url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Direct.txt"
     path: ./profiles/rules/direct.txt
 
+  direct:
+    <<: *RuleSet
+    url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Software.txt"
+    path: ./profiles/rules/software.txt
+
 # ======= 规则 =======
 
 rules:
 
   - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
   - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
-  
+
+  - RULE-SET,software,DIRECT
   - RULE-SET,reject,Reject
   - RULE-SET,proxy,Proxy
   - RULE-SET,direct,DIRECT
-  - GEOIP,private,DIRECT,no-resolve  
+  - GEOIP,private,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
   - MATCH,Match
