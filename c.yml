@@ -87,9 +87,10 @@ proxy-groups:
   - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
   - {name: Select, type: select, use: [Sub]}
   - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
-#隐藏广告拦截/兜底策略
+#隐藏直接连接/广告拦截/兜底策略
+  - {name: Direct, type: select, proxies: [DIRECT], hidden: true}
   - {name: Reject, type: select, proxies: [REJECT], hidden: true}
-  - {name: Match, type: select, proxies: [Proxy,DIRECT], hidden: true}
+  - {name: Match, type: select, proxies: [Proxy], hidden: true}
 #过滤设置
   - {name: HK, <<: *at, filter: *Filter-HK}
   - {name: TW, <<: *at, filter: *Filter-TW}
