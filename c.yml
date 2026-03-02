@@ -117,7 +117,7 @@ rule-providers:
     url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Direct.txt"
     path: ./profiles/rules/direct.txt
 
-  direct:
+  software:
     <<: *RuleSet
     url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Software.txt"
     path: ./profiles/rules/software.txt
