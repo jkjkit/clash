@@ -1,5 +1,5 @@
 payload:
-  #Private
+#Private
   - DOMAIN-SUFFIX,linux.do
   - DOMAIN-SUFFIX,ygpy.net
   - DOMAIN-SUFFIX,netlib.re
@@ -11,17 +11,20 @@ payload:
   - DOMAIN-SUFFIX,openai.com
   - DOMAIN-SUFFIX,instergram.com
   - DOMAIN-SUFFIX,facebook.com
-  #Google
+  - DOMAIN-SUFFIX,neodb.social
+  - DOMAIN-SUFFIX,cloudflare.com
+  - DOMAIN-SUFFIX,replit.com
+  - DOMAIN-SUFFIX,paypal.com
+  - DOMAIN-SUFFIX,linkedin.com
+#Google
   - DOMAIN-SUFFIX,g.ai
   - DOMAIN-SUFFIX,yt.be
-  - DOMAIN-SUFFIX,ytimg.com
-  - DOMAIN-SUFFIX,googleapis.com
   - DOMAIN-SUFFIX,gstatic.com
-  - DOMAIN-SUFFIX,ggpht.com
+  - DOMAIN-SUFFIX,youtube.com
   - IP-CIDR,172.110.32.0/21,no-resolve
   - IP-CIDR,216.73.80.0/20,no-resolve
   - IP-CIDR6,2620:120:e000::/40,no-resolve
-  #Twitter
+#Twitter
   - DOMAIN-SUFFIX,t.co
   - DOMAIN-SUFFIX,x.com
   - DOMAIN-KEYWORD,twitter
@@ -32,7 +35,8 @@ payload:
   - IP-CIDR,202.160.128.0/22,no-resolve
   - IP-CIDR,209.237.192.0/19,no-resolve
   - IP-CIDR,69.195.160.0/19,no-resolve
-    #Telegram
+
+#Telegram
   - DOMAIN-SUFFIX,t.me
   - DOMAIN-SUFFIX,telegram.org
   - IP-CIDR,109.239.140.0/24,no-resolve
@@ -48,11 +52,10 @@ payload:
   - PROCESS-NAME,nekox.messenger
   - PROCESS-NAME,org.telegram.messenger
   - PROCESS-NAME,telegram.exe
-  #Gitub
+
+#Gitub
   - DOMAIN-SUFFIX,github.com
   - DOMAIN-SUFFIX,github.community
   - DOMAIN-SUFFIX,github.dev
   - DOMAIN-SUFFIX,github.io
   - DOMAIN-SUFFIX,githubusercontent.com
-  - DOMAIN-KEYWORD,github
-    
