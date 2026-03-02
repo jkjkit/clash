@@ -69,7 +69,10 @@ Filter-SG: &Filter-SG '新加坡|SG|Singapore'
 # ======= 静态节点 =======
 
 proxies:
-
+  - { name: usa, type: vless, server: jp.111000.cc.cd, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
+  - { name: usb, type: vless, server: bestcf.030101.xyz, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
+  - { name: usc, type: vless, server: saas.sin.fan, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
+  - { name: usd, type: vless, server: freeyx.cloudflare88.eu.org, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
 
 # ======= 订阅节点 =======
 proxy-providers:
@@ -81,9 +84,9 @@ proxy-providers:
 # ======= 策略组 =======
 proxy-groups:
 #显示地区节点/订阅节点/静态节点
-  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,UN]}
+  - {name: Proxy, type: select, proxies: [HK,TW,US,UK,JP,KR,SG,DIRECT,Select,Static]}
   - {name: Select, type: select, use: [Sub]}
-  - {name: Static, type: select, include-all: true}
+  - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
 #隐藏广告拦截/兜底策略
   - {name: Reject, type: select, proxies: [REJECT, DIRECT], hidden: true}
   - {name: Match, type: select, proxies: [Proxy, Select, DIRECT], hidden: true}
