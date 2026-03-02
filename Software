@@ -1,0 +1,23 @@
+payload:
+  - PROCESS-NAME,NeatDM
+  - PROCESS-NAME,NeatDM.exe
+  - PROCESS-NAME,Thunder
+  - PROCESS-NAME,Thunder.exe
+  - PROCESS-NAME,ThunderVIP.exe
+  - PROCESS-NAME,IDMan.exe
+  - PROCESS-NAME,IEMonitor.exe
+  - PROCESS-NAME,idmbroker.exe
+  - PROCESS-NAME,aria2
+  - PROCESS-NAME,aria2.exe
+  - PROCESS-NAME,aria2c
+  - PROCESS-NAME,xdm
+  - PROCESS-NAME,xdm.exe
+  - PROCESS-NAME,xdman,DIRECT
+  - PROCESS-NAME,xdman.exe,DIRECT
+  - PROCESS-NAME,fdm,DIRECT
+  - PROCESS-NAME,fdm.exe,DIRECT
+  - PROCESS-NAME,qBittorrent,DIRECT
+  - PROCESS-NAME,qbittorrent.exe,DIRECT
+  - PROCESS-NAME,qbittorrent-nox,DIRECT
+
+  - PACKAGE-NAME,com.tencent.mm,DIRECT
