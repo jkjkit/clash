@@ -69,3 +69,6 @@ payload:
   - DOMAIN-SUFFIX,shz.al
   - DOMAIN-SUFFIX,igdux.top
   - DOMAIN-SUFFIX,paste.rs
+  - DOMAIN-SUFFIX,126.net
+  - DOMAIN-SUFFIX,163.com
+  - DOMAIN-SUFFIX,163.com
