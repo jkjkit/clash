@@ -12,12 +12,12 @@ payload:
   - PROCESS-NAME,aria2c
   - PROCESS-NAME,xdm
   - PROCESS-NAME,xdm.exe
-  - PROCESS-NAME,xdman,DIRECT
-  - PROCESS-NAME,xdman.exe,DIRECT
-  - PROCESS-NAME,fdm,DIRECT
-  - PROCESS-NAME,fdm.exe,DIRECT
-  - PROCESS-NAME,qBittorrent,DIRECT
-  - PROCESS-NAME,qbittorrent.exe,DIRECT
-  - PROCESS-NAME,qbittorrent-nox,DIRECT
+  - PROCESS-NAME,xdman
+  - PROCESS-NAME,xdman.exe
+  - PROCESS-NAME,fdm
+  - PROCESS-NAME,fdm.exe
+  - PROCESS-NAME,qBittorrent
+  - PROCESS-NAME,qbittorrent.exe
+  - PROCESS-NAME,qbittorrent-nox
 
-  - PACKAGE-NAME,com.tencent.mm,DIRECT
+  - PACKAGE-NAME,com.tencent.mm
