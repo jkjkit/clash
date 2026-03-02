@@ -117,16 +117,22 @@ rule-providers:
     url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Direct.txt"
     path: ./profiles/rules/direct.txt
 
+  direct:
+    <<: *RuleSet
+    url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Software.txt"
+    path: ./profiles/rules/software.txt
+
 # ======= 规则 =======
 
 rules:
 
   - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
   - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
-  
+
+  - RULE-SET,software,DIRECT
   - RULE-SET,reject,Reject
   - RULE-SET,proxy,Proxy
   - RULE-SET,direct,DIRECT
-  - GEOIP,private,DIRECT,no-resolve  
+  - GEOIP,private,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
   - MATCH,Match
