@@ -14,6 +14,7 @@ payload:
   - DOMAIN-SUFFIX,360.com
   - DOMAIN-SUFFIX,baidu.com
   - DOMAIN-SUFFIX,qq.com
+  - DOMAIN-SUFFIX,tencent.com
   - DOMAIN-SUFFIX,zhihu.com
   - DOMAIN-SUFFIX,doubanio.com
   - DOMAIN-SUFFIX,douban.com
@@ -25,11 +26,12 @@ payload:
   - DOMAIN-SUFFIX,toutiao.com
   - DOMAIN-SUFFIX,microsoft.com
   - DOMAIN-SUFFIX,live.com
-
+  - DOMAIN-SUFFIX,amap.com
   - DOMAIN-SUFFIX,qwen.ai
   - DOMAIN-SUFFIX,deepseek.com
   - DOMAIN-SUFFIX,qwen.ai
   - DOMAIN-SUFFIX,chatglm.cn
+  - DOMAIN-SUFFIX,alipay.com
 
 #视频
   - DOMAIN-SUFFIX,douyin.com
@@ -51,13 +53,14 @@ payload:
   - DOMAIN-SUFFIX,fagedongxi.comi
 
 #网购
+
   - DOMAIN-SUFFIX,taobao.com
   - DOMAIN-SUFFIX,jd.com
   - DOMAIN-SUFFIX,goofish.com
   - DOMAIN-SUFFIX,vip.com
   - DOMAIN-SUFFIX,1688.com
   - DOMAIN-SUFFIX,pinduoduo.com
-  - DOMAIN-SUFFIX,
+  - DOMAIN-SUFFIX,cup.com
 #其它
   - DOMAIN-SUFFIX,qireader.com
   - DOMAIN-SUFFIX,rebang.today
@@ -68,7 +71,10 @@ payload:
   - DOMAIN-SUFFIX,inboxes.com
   - DOMAIN-SUFFIX,shz.al
   - DOMAIN-SUFFIX,igdux.top
+  - DOMAIN-SUFFIX,url.cn
+  - DOMAIN-SUFFIX,ip.cn
   - DOMAIN-SUFFIX,paste.rs
   - DOMAIN-SUFFIX,126.net
   - DOMAIN-SUFFIX,163.com
   - DOMAIN-SUFFIX,163.com
+  - DOMAIN-SUFFIX,alibabachengdun.com
