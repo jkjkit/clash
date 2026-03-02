@@ -15,7 +15,7 @@ geo-update-interval: 24
 tcp-concurrent: true
 find-process-mode: strict
 global-client-fingerprint: chrome
-
+ 
 sniffer:
   enable: true
   force-dns-mapping: true
@@ -55,7 +55,7 @@ fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/
 # 规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
 RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yaml, proxy: Proxy}
 
-#节点过滤 []
+#节点过滤
 Filter-HK: &Filter-HK '香港|HK|HongKong'
 Filter-TW: &Filter-TW '台湾|TW|Taiwan'
 Filter-US: &Filter-US '美国|US|America'
@@ -63,17 +63,13 @@ Filter-UK: &Filter-UK '英国|UK|England'
 Filter-JP: &Filter-JP '日本|JP|Japan'
 Filter-KR: &Filter-KR '韩国|KR|Korea'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
-# ======= 静态节点 =======
 
+#节点列表
 proxies:
-  - { name: usa, type: vless, server: jp.111000.cc.cd, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
-  - { name: usb, type: vless, server: bestcf.030101.xyz, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
-  - { name: usc, type: vless, server: saas.sin.fan, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
-  - { name: usd, type: vless, server: freeyx.cloudflare88.eu.org, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
 
-# ======= 策略组 =======
+
 proxy-groups:
-#显示地区节点/订阅节点/静态节点
+#显示地区节点/全部节点
   - {name: Proxy, type: select, proxies: [Select,DIRECT,SG,HK,TW,US,UK,JP,KR]}
   - {name: Select, type: select, include-all: true}
 
@@ -81,13 +77,13 @@ proxy-groups:
   - {name: Reject, type: select, proxies: [REJECT], hidden: true}
   - {name: Match, type: select, proxies: [Proxy,DIRECT], hidden: true}
 #过滤设置
-  - {name: HK, <<: *at, filter: *Filter-HK}
-  - {name: TW, <<: *at, filter: *Filter-TW}
-  - {name: US, <<: *at, filter: *Filter-US}
-  - {name: UK, <<: *at, filter: *Filter-UK}
-  - {name: JP, <<: *at, filter: *Filter-JP}
-  - {name: KR, <<: *at, filter: *Filter-KR}
-  - {name: SG, <<: *at, filter: *Filter-SG}
+  - {name: HK, <<: *at, filter: *Filter-HK, include-all: true}
+  - {name: TW, <<: *at, filter: *Filter-TW, include-all: true}
+  - {name: US, <<: *at, filter: *Filter-US, include-all: true}
+  - {name: UK, <<: *at, filter: *Filter-UK, include-all: true}
+  - {name: JP, <<: *at, filter: *Filter-JP, include-all: true}
+  - {name: KR, <<: *at, filter: *Filter-KR, include-all: true}
+  - {name: SG, <<: *at, filter: *Filter-SG, include-all: true}
 
 # ======= 规则集 =======
 rule-providers:
