@@ -129,6 +129,7 @@ rules:
 
   - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
   - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR6,fe80::1b8a:ab64:c00f:4942/128,DIRECT,no-resolve
 
   - RULE-SET,software,DIRECT
   - RULE-SET,reject,Reject
