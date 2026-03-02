@@ -1,48 +1,82 @@
 # Clash 配置模板
-port: 7890
-socks-port: 7891
-allow-lan: true
+mixed-port: 7890
 mode: rule
-log-level: info
 ipv6: true
-udp: true
-
+allow-lan: true
 unified-delay: true
-geodata-mode: false
-geodata-loader: standard
-geo-auto-update: true
-geo-update-interval: 24
 tcp-concurrent: true
-find-process-mode: strict
-global-client-fingerprint: chrome
 
+log-level: warning
+bind-address: '*'
+find-process-mode: 'always'
+keep-alive-interval: 15
+keep-alive-idle: 600
+
+# 认证配置
+authentication:
+  - mihomo:yyds666
+skip-auth-prefixes:
+  - 192.168.1.0/24
+  - 192.168.31.0/24
+  - 192.168.100.0/24
+  - 127.0.0.1/8
+
+# 实验性功能
+experimental:
+  quic-go-disable-gso: true 
+
+# 配置存储
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+# 流量嗅探
 sniffer:
   enable: true
-  force-dns-mapping: true
-  parse-pure-ip: true
-  override-destination: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  skip-domain:
+    - "Mijia Cloud"
+    - "+.push.apple.com"
 
+# TUN模式配置
+tun:
+  enable: false
+  stack: mixed
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+    
+# DNS配置
 dns:
   enable: true
-  prefer-h3: true
-  listen: 0.0.0.0:1053
-  ipv6: false
+  ipv6: true
   enhanced-mode: fake-ip
-  fake-ip-range: 28.0.0.1/8
-  fake-ip-filter:
-  - "*.lan"
-  - "*.local"
-  - localhost.ptlogin2.qq.com
-  - +.srv.nintendo.net
-  - +.stun.playstation.net
-  - +.msftconnecttest.com
-  - +.msftncsi.com
+  fake-ip-range: 198.18.0.1/16
   default-nameserver:
+    - 119.29.29.29
+    - 180.184.1.1
     - 223.5.5.5
-    - 223.6.6.6
   nameserver:
-    - https://223.5.5.5/dns-query
-    - https://223.6.6.6/dns-query
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  fake-ip-filter:
+    - rule-set:Direct
+    - rule-set:Private
+    - rule-set:China
+    - +.miwifi.com
+    - +.docker.io
+    - +.market.xiaomi.com
+    - +.push.apple.com
 
 # ======= 锚点定义 =======
 
@@ -101,40 +135,59 @@ proxy-groups:
   - {name: SG, <<: *at, filter: *Filter-SG}
 
 # ======= 规则集 =======
-rule-providers:
-
-  reject:
-    <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Reject.txt"
-    path: ./profiles/rules/reject.txt
-
-  proxy:
-    <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Proxy.txt"
-    path: ./profiles/rules/proxy.txt
-
-  direct:
-    <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Direct.txt"
-    path: ./profiles/rules/direct.txt
-
-  software:
-    <<: *RuleSet
-    url: "https://cdn.jsdelivr.net/gh/jkjkit/clash@main/Software.txt"
-    path: ./profiles/rules/software.txt
-
+BehaviorDN: &BehaviorDN {type: http, behavior: domain, format: mrs, interval: 86400}
+BehaviorIP: &BehaviorIP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
+rule-providers: 
+  Private:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Private.mrs}
+  Direct:         {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Direct.mrs}
+  AppleCN:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AppleCN.mrs}
+  Download:       {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Download.mrs}
+  XPTV:           {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/XPTV.mrs}
+  AI:             {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AI.mrs}
+  Telegram:       {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Telegram.mrs}
+  SocialMedia:    {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/SocialMedia.mrs}  
+  YouTube:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/YouTube.mrs}
+  Spotify:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Spotify.mrs}
+  Netflix:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Netflix.mrs}
+  Disney:         {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Disney.mrs}
+  HBO:            {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/HBO.mrs}
+  Proxy:          {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Proxy.mrs}
+  China:          {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/China.mrs}
+  # IP规则
+  TelegramIP:     {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Telegram.mrs}  
+  SocialMediaIP:  {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/SocialMedia.mrs}  
+  NetflixIP:      {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Netflix.mrs}
+  ProxyIP:        {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Proxy.mrs} 
+  ChinaIP:        {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/China.mrs}
+  PrivateIP:      {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Private.mrs}
 # ======= 规则 =======
 
 rules:
+  # 拦截规则
+  - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((GEOIP,CN)))),REJECT  # 阻止海外 QUIC
 
-  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
-  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
-  - IP-CIDR6,fe80::1b8a:ab64:c00f:4942/128,DIRECT,no-resolve
-
-  - RULE-SET,software,DIRECT
-  - RULE-SET,reject,Reject
-  - RULE-SET,proxy,Proxy
-  - RULE-SET,direct,DIRECT
-  - GEOIP,private,DIRECT,no-resolve
-  - GEOIP,CN,DIRECT,no-resolve
-  - MATCH,Match
+  # 域名规则
+  - RULE-SET,Private,Direct
+  - RULE-SET,Direct,Direct
+  - RULE-SET,AppleCN,Direct
+  - RULE-SET,Download,Direct
+  - RULE-SET,XPTV,Direct
+  - RULE-SET,AI,Static
+  - RULE-SET,Telegram,Proxy
+  - RULE-SET,SocialMedia,Proxy
+  - RULE-SET,YouTube,Proxy
+  - RULE-SET,Spotify,Proxy
+  - RULE-SET,Netflix,Proxy
+  - RULE-SET,Disney,Proxy
+  - RULE-SET,HBO,Proxy
+  - RULE-SET,Proxy,Proxy
+  - RULE-SET,China,Direct
+  # IP规则
+  - RULE-SET,PrivateIP,Direct,no-resolve
+  - RULE-SET,TelegramIP,Proxy,no-resolve
+  - RULE-SET,SocialMediaIP,Proxy,no-resolve
+  - RULE-SET,NetflixIP,Proxy,no-resolve
+  - RULE-SET,ProxyIP,Proxy,no-resolve
+  - RULE-SET,ChinaIP,Direct
+  # 兜底规则
+  - MATCH,Proxy
