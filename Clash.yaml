@@ -46,9 +46,6 @@ dns:
 
 # ======= 锚点定义 =======
 
-# 锚点 - 节点检测 [每24小时更新一次订阅节点，每 60 秒一次健康检查]
-pr: &pr {type: http, interval: 86400, health-check: {enable: true, interval: 60, url: "http://www.gstatic.com/generate_204"}}
-
 # 锚点 - 自动选择 [每 6 秒一次惰性健康检查，容差 20ms，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
 at: &at {type: url-test, interval: 300, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
 
@@ -74,19 +71,12 @@ proxies:
   - { name: usc, type: vless, server: saas.sin.fan, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
   - { name: usd, type: vless, server: freeyx.cloudflare88.eu.org, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
 
-# ======= 订阅节点 =======
-proxy-providers:
-  Sub:
-    <<: *pr
-    url: "订阅链接"
-    path: ./profiles/proxies/subscription.yaml
-
 # ======= 策略组 =======
 proxy-groups:
 #显示地区节点/订阅节点/静态节点
-  - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
+  - {name: Proxy, type: select, proxies: [Select,DIRECT,SG,HK,TW,US,UK,JP,KR]}
   - {name: Select, type: select, use: [Sub]}
-  - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
+
 #隐藏广告拦截/兜底策略
   - {name: Reject, type: select, proxies: [REJECT], hidden: true}
   - {name: Match, type: select, proxies: [Proxy,DIRECT], hidden: true}
