@@ -22,7 +22,7 @@ payload:
   - DOMAIN-SUFFIX,weibo.com
   - DOMAIN-SUFFIX,weibo.cn
   - DOMAIN-SUFFIX,toutiao.com
-
+  - DOMAIN-SUFFIX,microsoft.com
   - DOMAIN-SUFFIX,live.com
 
   - DOMAIN-SUFFIX,qwen.ai
