@@ -15,6 +15,7 @@ payload:
   - DOMAIN-SUFFIX,baidu.com
   - DOMAIN-SUFFIX,qq.com
   - DOMAIN-SUFFIX,zhihu.com
+  - DOMAIN-SUFFIX,doubanio.com
   - DOMAIN-SUFFIX,douban.com
   - DOMAIN-SUFFIX,xiaohongshu.com
   - DOMAIN-SUFFIX,yuque.com
