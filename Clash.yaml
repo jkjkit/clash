@@ -24,7 +24,6 @@ sniffer:
     QUIC:
       ports: [443, 8443]
   skip-domain:
-    - "Mijia Cloud"
     - "+.push.apple.com"
 
 tun:
@@ -53,9 +52,6 @@ dns:
     - rule-set:Direct
     - rule-set:Private
     - rule-set:China
-    - +.miwifi.com
-    - +.docker.io
-    - +.market.xiaomi.com
     - +.push.apple.com
 
 # ======= 锚点定义 =======
