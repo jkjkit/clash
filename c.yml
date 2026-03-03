@@ -12,15 +12,6 @@ find-process-mode: 'always'
 keep-alive-interval: 15
 keep-alive-idle: 600
 
-# 认证配置
-authentication:
-  - mihomo:yyds666
-skip-auth-prefixes:
-  - 192.168.1.0/24
-  - 192.168.31.0/24
-  - 192.168.100.0/24
-  - 127.0.0.1/8
-
 # 实验性功能
 experimental:
   quic-go-disable-gso: true 
@@ -42,7 +33,6 @@ sniffer:
     QUIC:
       ports: [443, 8443]
   skip-domain:
-    - "Mijia Cloud"
     - "+.push.apple.com"
 
 # TUN模式配置
@@ -73,9 +63,6 @@ dns:
     - rule-set:Direct
     - rule-set:Private
     - rule-set:China
-    - +.miwifi.com
-    - +.docker.io
-    - +.market.xiaomi.com
     - +.push.apple.com
 
 # ======= 锚点定义 =======
