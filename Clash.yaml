@@ -80,9 +80,9 @@ proxies:
 
 proxy-groups:
 #显示地区节点/全部节点
-  - {name: Proxy, type: select, proxies: [Select,DIRECT,SG,HK,TW,US,UK,JP,KR]}
+  - {name: Proxy, type: select, proxies: [Trans,Select,DIRECT,SG,HK,TW,US,UK,JP,KR]}
   - {name: Select, type: select, include-all: true}
-
+  - {name: Trans, <<: *fb, proxies: [SG,HK,TW,US,UK,JP,KR,Select,Direct]}
 #隐藏Direct/广告拦截/兜底策略
   - {name: Direct, type: select, proxies: [DIRECT], hidden: true}
   - {name: Reject, type: select, proxies: [REJECT], hidden: true}
@@ -127,6 +127,9 @@ rule-providers:
 rules:
   # 拦截规则
   - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((GEOIP,CN)))),REJECT  # 阻止海外 QUIC
+
+  - DOMAIN-SUFFIX,bkpcp.top,Direct
+  - DOMAIN-SUFFIX,061899.xyz,Direct
 
   # 域名规则
   - RULE-SET,Private,Direct
