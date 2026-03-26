@@ -10,7 +10,7 @@ payload:
   - DOMAIN-SUFFIX,neodb.social
   - DOMAIN-SUFFIX,replit.com
   - DOMAIN-SUFFIX,linkedin.com
-
+  - DOMAIN-SUFFIX,speedtest.net
 #Google
   - DOMAIN-SUFFIX,g.ai
   - DOMAIN-SUFFIX,google.com
@@ -23,27 +23,26 @@ payload:
   - DOMAIN-SUFFIX,youtube.com
   - DOMAIN-SUFFIX,youtu.be
   - DOMAIN-SUFFIX,youtubekids.com
-  - DOMAIN-SUFFIX,ytimg.com               # YouTube 静态资源
-  - DOMAIN-SUFFIX,googlevideo.com         # YouTube 视频流传输
-  - DOMAIN-SUFFIX,ggpht.com               # 用户头像及图片托管
-  - DOMAIN-SUFFIX,yt.be                   # YouTube 内部短链接
+  - DOMAIN-SUFFIX,ytimg.com
+  - DOMAIN-SUFFIX,googlevideo.com
+  - DOMAIN-SUFFIX,ggpht.com
+  - DOMAIN-SUFFIX,yt.be
 
-  # --- [底层基础设施与 API] ---
-  - DOMAIN-SUFFIX,gstatic.com             # Google 静态资源（CSS, JS, 字体，必选）
-  - DOMAIN-SUFFIX,googleapis.com          # Google 核心 API 接口（许多 App 依赖此项）
-  - DOMAIN-SUFFIX,googleusercontent.com    # 用户上传内容托管（如头像、云盘附件、预览图）
-  - DOMAIN-SUFFIX,goo.gl                  # Google 官方短链接服务
-  - DOMAIN-SUFFIX,gvt1.com                # Chrome 更新、组件下载及系统更新
+  - DOMAIN-SUFFIX,gstatic.com
+  - DOMAIN-SUFFIX,googleapis.com
+  - DOMAIN-SUFFIX,googleusercontent.com
+  - DOMAIN-SUFFIX,goo.gl
+  - DOMAIN-SUFFIX,gvt1.com
   - DOMAIN-SUFFIX,gvt2.com
   - DOMAIN-SUFFIX,gvt3.com
 
   - DOMAIN-SUFFIX,blogger.com
-  - DOMAIN-SUFFIX,ggpht.cn                # 图片加速域名
-  - DOMAIN-SUFFIX,recaptcha.net           # Google 验证码服务
-  - DOMAIN-SUFFIX,google-analytics.com    # 网页统计分析
-  - DOMAIN-SUFFIX,googletagmanager.com    # 标签管理工具
+  - DOMAIN-SUFFIX,ggpht.cn
+  - DOMAIN-SUFFIX,recaptcha.net
+  - DOMAIN-SUFFIX,google-analytics.com
+  - DOMAIN-SUFFIX,googletagmanager.com
   - DOMAIN-SUFFIX,googleplay.com
-  - DOMAIN-SUFFIX,connectivitycheck.gstatic.com # Android联网检查
+  - DOMAIN-SUFFIX,connectivitycheck.gstatic.com
 
 #Twitter
   - DOMAIN-SUFFIX,x.ai
@@ -51,18 +50,18 @@ payload:
   - DOMAIN-SUFFIX,t.co
   - DOMAIN-SUFFIX,grok.com
   - DOMAIN-SUFFIX,twitter.com
-
-  - DOMAIN-SUFFIX,periscope.tv       # 官方直播服务
-  - DOMAIN-SUFFIX,twimg.com          # 最核心域名：托管图片、视频、用户头像
-  - DOMAIN-SUFFIX,abs.twimg.com      # 网站前端脚本 (JS/CSS)
-  - DOMAIN-SUFFIX,video.twimg.com    # 视频流传输
-  - DOMAIN-SUFFIX,timg.co            # 缩略图服务
-  - DOMAIN-SUFFIX,twitterapi.com     # 官方 API 接口
-  - DOMAIN-SUFFIX,ads-twitter.com    # 广告与分析（有时影响内容加载）
+  - DOMAIN-SUFFIX,periscope.tv
+  - DOMAIN-SUFFIX,twimg.com
+  - DOMAIN-SUFFIX,abs.twimg.com
+  - DOMAIN-SUFFIX,video.twimg.com
+  - DOMAIN-SUFFIX,timg.co
+  - DOMAIN-SUFFIX,twitterapi.com
+  - DOMAIN-SUFFIX,ads-twitter.com
 
 #Telegram
   - DOMAIN-SUFFIX,t.me
   - DOMAIN-SUFFIX,telegram.org
+  - DOMAIN-SUFFIX,api.imem.app
 
 #Github
   - DOMAIN-SUFFIX,github.com
@@ -87,7 +86,6 @@ payload:
   - DOMAIN-SUFFIX,instagr.am
   - DOMAIN-SUFFIX,cdninstagram.com
   - DOMAIN-SUFFIX,threads.net
-
   - DOMAIN-SUFFIX,fbcdn.net
   - DOMAIN-SUFFIX,fbsbx.com
   - DOMAIN-SUFFIX,tfbnw.net
@@ -95,14 +93,12 @@ payload:
 #PayPal
   - DOMAIN-SUFFIX,paypal.com
   - DOMAIN-SUFFIX,paypal.me
-
-  - DOMAIN-SUFFIX,paypalobjects.com  # 核心静态资源
-  - DOMAIN-SUFFIX,paypal-mktg.com    # 营销与素材内容
-  - DOMAIN-SUFFIX,paypalcorp.com     # 企业相关资源
-
-  - DOMAIN-SUFFIX,paypalc3.com       # 支付跳转与组件
+  - DOMAIN-SUFFIX,paypalobjects.com
+  - DOMAIN-SUFFIX,paypal-mktg.com
+  - DOMAIN-SUFFIX,paypalcorp.com
+  - DOMAIN-SUFFIX,paypalc3.com
   - DOMAIN-SUFFIX,paypalc3.net
-  - DOMAIN-SUFFIX,braintreegateway.com # PayPal旗下的支付网关
+  - DOMAIN-SUFFIX,braintreegateway.com
   - DOMAIN-SUFFIX,braintree-api.com
 
 #ClouFlare
@@ -110,15 +106,12 @@ payload:
   - DOMAIN-SUFFIX,cloudflare.net
   - DOMAIN-SUFFIX,cloudflare.org
   - DOMAIN-SUFFIX,cloudflareinsights.com
-
   - DOMAIN-SUFFIX,workers.dev
   - DOMAIN-SUFFIX,cloudflarepages.com
   - DOMAIN-SUFFIX,pages.dev
-
   - DOMAIN-SUFFIX,cdnjs.com
   - DOMAIN-SUFFIX,cdnjs.cloudflare.com
   - DOMAIN-SUFFIX,cloudinary.com
-
   - DOMAIN-SUFFIX,cloudflareclient.com
   - DOMAIN-SUFFIX,cloudflare-dns.com
   - DOMAIN-SUFFIX,1.1.1.1
@@ -126,28 +119,24 @@ payload:
 #OpenAI
   - DOMAIN-SUFFIX,openai.com
   - DOMAIN-SUFFIX,chatgpt.com
-  - DOMAIN-SUFFIX,oaistatic.com           # ChatGPT 静态资源
-  - DOMAIN-SUFFIX,oaiusercontent.com      # 用户上传内容
-
-  - DOMAIN-SUFFIX,auth0.com               # 身份认证服务
-  - DOMAIN-SUFFIX,identrust.com           # 证书信任服务
-  - DOMAIN-SUFFIX,stripe.com              # 支付服务
-
-  - DOMAIN-SUFFIX,intercom.io             # 客服支持与对话系统
-  - DOMAIN-SUFFIX,intercomcdn.com         # 客服系统静态资源
-  - DOMAIN-SUFFIX,featuregates.org        # 灰度测试/功能开关控制
-  - DOMAIN-SUFFIX,statsigapi.net          # 数据统计与配置分发
-  - DOMAIN-SUFFIX,openaiservice.com       # App 端特定 API 调用
+  - DOMAIN-SUFFIX,oaistatic.com
+  - DOMAIN-SUFFIX,oaiusercontent.com
+  - DOMAIN-SUFFIX,auth0.com
+  - DOMAIN-SUFFIX,identrust.com
+  - DOMAIN-SUFFIX,stripe.com
+  - DOMAIN-SUFFIX,intercom.io
+  - DOMAIN-SUFFIX,intercomcdn.com
+  - DOMAIN-SUFFIX,featuregates.org
+  - DOMAIN-SUFFIX,statsigapi.net
+  - DOMAIN-SUFFIX,openaiservice.com
 
 #Anthropic
   - DOMAIN-SUFFIX,claude.ai
   - DOMAIN-SUFFIX,anthropic.com
-  - DOMAIN-SUFFIX,claude.usercontent.com # 用户上传文件、图片
-
-  - DOMAIN-SUFFIX,sentry.io           # 错误监控
-  - DOMAIN-SUFFIX,intercom.io         # 客服支持与系统通知
-  - DOMAIN-SUFFIX,intercomcdn.com     # 客服系统资源加载
-  
-  - DOMAIN-SUFFIX,stripe.com          # Pro 会员订阅支付接口
-  - DOMAIN-SUFFIX,recaptcha.net       # Google 验证码
-  - DOMAIN-SUFFIX,hcaptcha.com        # 部分地区的备用人机验证
+  - DOMAIN-SUFFIX,claude.usercontent.com
+  - DOMAIN-SUFFIX,sentry.io
+  - DOMAIN-SUFFIX,intercom.io
+  - DOMAIN-SUFFIX,intercomcdn.com
+  - DOMAIN-SUFFIX,stripe.com
+  - DOMAIN-SUFFIX,recaptcha.net
+  - DOMAIN-SUFFIX,hcaptcha.com
