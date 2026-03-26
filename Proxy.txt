@@ -1,82 +1,180 @@
 payload:
 #Private
+  - DOMAIN-SUFFIX,duckduckgo.com
+  - DOMAIN-SUFFIX,duck.ai
   - DOMAIN-SUFFIX,linux.do
   - DOMAIN-SUFFIX,ygpy.net
   - DOMAIN-SUFFIX,netlib.re
-  - DOMAIN-SUFFIX,workers.dev
   - DOMAIN-SUFFIX,vercel.com
-  - DOMAIN-SUFFIX,chatgpt.com
   - DOMAIN-SUFFIX,claude.ai
-  - DOMAIN-SUFFIX,grok.com
-  - DOMAIN-SUFFIX,openai.com
-  - DOMAIN-SUFFIX,instergram.com
-  - DOMAIN-SUFFIX,facebook.com
   - DOMAIN-SUFFIX,neodb.social
-  - DOMAIN-SUFFIX,cloudflare.com
   - DOMAIN-SUFFIX,replit.com
-  - DOMAIN-SUFFIX,paypal.com
   - DOMAIN-SUFFIX,linkedin.com
+
 #Google
 
-  - DOMAIN-SUFFIX,google.com
-  - DOMAIN-SUFFIX,youtube.com
-  - DOMAIN-SUFFIX,gmail.com
-  - DOMAIN-SUFFIX,android.com
-  - DOMAIN-SUFFIX,chrome.com
-  - DOMAIN-SUFFIX,gemini.google.com
+  - DOMAIN-SUFFIX,google.com              # Google 搜索、云端硬盘、日历等主站
+  - DOMAIN-SUFFIX,google.com.hk           # Google 香港（国内搜索常自动跳转至此）
+  - DOMAIN-SUFFIX,gmail.com               # Gmail 网页版
+  - DOMAIN-SUFFIX,googlemail.com          # Gmail 备用域名
+  - DOMAIN-SUFFIX,android.com             # Android 官网及开发者资源
+  - DOMAIN-SUFFIX,chrome.com              # Chrome 浏览器官网
 
-  - DOMAIN-SUFFIX,blogger.com
-  - DOMAIN-SUFFIX,youtubekids.com
-  - DOMAIN-SUFFIX,youtubefanfest.com
-  - DOMAIN-SUFFIX,youtubemobilesupport.com
+  # --- [YouTube 相关] ---
+  - DOMAIN-SUFFIX,youtube.com             # YouTube 主站
+  - DOMAIN-SUFFIX,youtu.be                # YouTube 短链接
+  - DOMAIN-SUFFIX,youtubekids.com         # YouTube 儿童版
+  - DOMAIN-SUFFIX,ytimg.com               # YouTube 静态资源（图标、封面图）
+  - DOMAIN-SUFFIX,googlevideo.com         # YouTube 视频流传输（不加此项无法播放视频）
+  - DOMAIN-SUFFIX,ggpht.com               # YouTube/Google 用户头像及图片托管
+  - DOMAIN-SUFFIX,yt.be                   # YouTube 内部短链接
 
-  - DOMAIN-SUFFIX,gstatic.com
-  - DOMAIN-SUFFIX,googleapis.com
-  - DOMAIN-SUFFIX,googleusercontent.com
-  - DOMAIN-SUFFIX,googlevideo.com
-  - DOMAIN-SUFFIX,google.com.hk
-  - DOMAIN-SUFFIX,goo.gl
-  - DOMAIN-SUFFIX,gvt1.com
+  # --- [底层基础设施与 API] ---
+  - DOMAIN-SUFFIX,gstatic.com             # Google 静态资源（CSS, JS, 字体，必选）
+  - DOMAIN-SUFFIX,googleapis.com          # Google 核心 API 接口（许多 App 依赖此项）
+  - DOMAIN-SUFFIX,googleusercontent.com    # 用户上传内容托管（如头像、云盘附件、预览图）
+  - DOMAIN-SUFFIX,goo.gl                  # Google 官方短链接服务
+  - DOMAIN-SUFFIX,gvt1.com                # Chrome 更新、组件下载及系统更新
   - DOMAIN-SUFFIX,gvt2.com
   - DOMAIN-SUFFIX,gvt3.com
-  - DOMAIN-SUFFIX,g.ai
-  - DOMAIN-SUFFIX,yt.be
-  - DOMAIN-SUFFIX,ggpht.cn
-  - DOMAIN-SUFFIX,ggpht.com
-  - DOMAIN-SUFFIX,ytimg.com
+
+  - DOMAIN-SUFFIX,blogger.com             # 博客服务
+  - DOMAIN-SUFFIX,g.ai                    # Google AI 相关短域名
+  - DOMAIN-SUFFIX,ggpht.cn                # Google 早期在华图片加速域名（建议代理）
+  - DOMAIN-SUFFIX,recaptcha.net           # Google 验证码服务（全球通用接口）
+  - DOMAIN-SUFFIX,google-analytics.com    # 网页统计分析（部分网站依赖此脚本加载）
+  - DOMAIN-SUFFIX,googletagmanager.com    # 标签管理工具
+  - DOMAIN-SUFFIX,googleplay.com          # Play 商店
+  - DOMAIN-SUFFIX,connectivitycheck.gstatic.com # Android 联网检查（解决“连接受限”感叹号）
 
 #Twitter
-  - DOMAIN-SUFFIX,t.co
-  - DOMAIN-SUFFIX,x.com
-  - DOMAIN-KEYWORD,twitter
-  - IP-CIDR,192.133.76.0/22,no-resolve
-  - IP-CIDR,199.16.156.0/22,no-resolve
-  - IP-CIDR,199.59.148.0/22,no-resolve
-  - IP-CIDR,199.96.56.0/21,no-resolve
-  - IP-CIDR,202.160.128.0/22,no-resolve
-  - IP-CIDR,209.237.192.0/19,no-resolve
-  - IP-CIDR,69.195.160.0/19,no-resolve
+
+  - DOMAIN-SUFFIX,x.com              # 新品牌主站
+  - DOMAIN-SUFFIX,twitter.com        # 原品牌主站（目前仍有大量跳转）
+  - DOMAIN-SUFFIX,t.co               # 官方短链接（点击推文中的链接必经之路）
+  - DOMAIN-SUFFIX,periscope.tv       # 官方直播服务 (视频流相关)
+  - DOMAIN-SUFFIX,grok.com
+  - DOMAIN-SUFFIX,x.ai
+
+  # --- 静态资源与多媒体 (CDN) ---
+  - DOMAIN-SUFFIX,twimg.com          # 最核心域名：托管图片、视频、用户头像
+  - DOMAIN-SUFFIX,abs.twimg.com      # 网站前端脚本 (JS/CSS)
+  - DOMAIN-SUFFIX,video.twimg.com    # 视频流传输
+  - DOMAIN-SUFFIX,timg.co            # 缩略图服务
+
+  # --- 接口与辅助服务 ---
+  - DOMAIN-SUFFIX,twitterapi.com     # 官方 API 接口
+  - DOMAIN-SUFFIX,ads-twitter.com    # 广告与分析（有时影响内容加载）
 
 #Telegram
   - DOMAIN-SUFFIX,t.me
   - DOMAIN-SUFFIX,telegram.org
-  - IP-CIDR,109.239.140.0/24,no-resolve
-  - IP-CIDR,149.154.160.0/20,no-resolve
-  - IP-CIDR,185.76.151.0/24,no-resolve
-  - IP-CIDR,91.105.192.0/23,no-resolve
-  - IP-CIDR,91.108.0.0/16,no-resolve
-  - IP-CIDR,95.161.64.0/20,no-resolve
-  - IP-CIDR6,2001:67c:4e8::/48,no-resolve
-  - IP-CIDR6,2001:b28:f23c::/47,no-resolve
-  - IP-CIDR6,2001:b28:f23f::/48,no-resolve
-  - IP-CIDR6,2a0a:f280::/32,no-resolve
-  - PROCESS-NAME,nekox.messenger
-  - PROCESS-NAME,org.telegram.messenger
-  - PROCESS-NAME,telegram.exe
 
-#Gitub
-  - DOMAIN-SUFFIX,github.com
-  - DOMAIN-SUFFIX,github.community
-  - DOMAIN-SUFFIX,github.dev
-  - DOMAIN-SUFFIX,github.io
-  - DOMAIN-SUFFIX,githubusercontent.com
+#Github
+  - DOMAIN-SUFFIX,github.com          # 主站、代码仓库、Issue、PR
+  - DOMAIN-SUFFIX,github.io           # GitHub Pages 个人博客/文档
+  - DOMAIN-SUFFIX,github.blog         # 官方博客
+  - DOMAIN-SUFFIX,github.community    # 官方社区
+
+  - DOMAIN-SUFFIX,githubassets.com    # 网页 CSS、JS、图标等静态资源
+  - DOMAIN-SUFFIX,githubapp.com       # GitHub 官方应用接口
+
+  - DOMAIN-SUFFIX,githubusercontent.com # Raw 文件、头像、Issue 图片、Release 附件
+  - DOMAIN-SUFFIX,objects.githubusercontent.com # 具体的 Release 大文件下载
+  - DOMAIN-SUFFIX,media.githubusercontent.com # 大文件存储 (LFS)
+
+  - DOMAIN-SUFFIX,api.github.com      # GitHub API (第三方插件/IDE 调用)
+  - DOMAIN-SUFFIX,codeload.github.com # 源代码打包下载 (Zip)
+  - DOMAIN-SUFFIX,favicons.githubusercontent.com
+
+  - DOMAIN-SUFFIX,pkg.github.com      # GitHub Packages
+  - DOMAIN-SUFFIX,github.dev          # Web 版编辑器
+
+#Meta
+  - DOMAIN-SUFFIX,facebook.com
+  - DOMAIN-SUFFIX,facebook.net
+  - DOMAIN-SUFFIX,fb.com
+  - DOMAIN-SUFFIX,fb.me
+  - DOMAIN-SUFFIX,meta.com
+  - DOMAIN-SUFFIX,messenger.com 
+
+  - DOMAIN-SUFFIX,instagram.com
+  - DOMAIN-SUFFIX,instagr.am
+  - DOMAIN-SUFFIX,cdninstagram.com
+  - DOMAIN-SUFFIX,threads.net
+
+  - DOMAIN-SUFFIX,whatsapp.com
+  - DOMAIN-SUFFIX,whatsapp.net
+  - DOMAIN-SUFFIX,wa.me
+
+  - DOMAIN-SUFFIX,fbcdn.net          # 全系通用的核心图片/视频服务器
+  - DOMAIN-SUFFIX,fbsbx.com          # 内部资源存储与下载
+  - DOMAIN-SUFFIX,tfbnw.net          # Facebook 网络基础设施
+  - DOMAIN-SUFFIX,m.me               # Messenger 短链接
+
+  - DOMAIN-SUFFIX,oculus.com         # VR 设备与服务
+  - DOMAIN-SUFFIX,oculuscdn.com
+  - DOMAIN-SUFFIX,atlassolutions.com # 广告与数据接口
+
+#PayPal
+  - DOMAIN-SUFFIX,paypal.com         # 主站、登录、账单 (涵盖 accounts.paypal.com)
+  - DOMAIN-SUFFIX,paypal.me          # 个人付款链接
+  - DOMAIN-SUFFIX,paypal.cn          # 贝宝中国 (视需求可设为 DIRECT)
+
+  - DOMAIN-SUFFIX,paypalobjects.com  # 核心静态资源 (JS/CSS/图标)
+  - DOMAIN-SUFFIX,paypal-mktg.com    # 营销与素材内容
+  - DOMAIN-SUFFIX,paypalcorp.com     # 企业相关资源
+
+  - DOMAIN-SUFFIX,paypalc3.com       # 支付跳转与组件
+  - DOMAIN-SUFFIX,paypalc3.net
+  - DOMAIN-SUFFIX,braintreegateway.com # PayPal 旗下的支付网关 (很多网站调用)
+  - DOMAIN-SUFFIX,braintree-api.com
+
+#ClouFlare
+  - DOMAIN-SUFFIX,cloudflare.com      # 官方主站、控制台 (涵盖 dash.cloudflare.com)
+  - DOMAIN-SUFFIX,cloudflare.net      # 内部服务与部分 API
+  - DOMAIN-SUFFIX,cloudflare.org
+  - DOMAIN-SUFFIX,cloudflareinsights.com # 流量统计与分析 (Radar)
+
+  - DOMAIN-SUFFIX,workers.dev         # Workers 默认子域名 (必选，否则无法访问预览)
+  - DOMAIN-SUFFIX,cloudflarepages.com # Pages 预览域名
+  - DOMAIN-SUFFIX,pages.dev           # Pages 默认子域名
+  - DOMAIN-SUFFIX,pages.google.com    # (注：这是 Google 的，但开发者常混淆)
+
+  - DOMAIN-SUFFIX,cdnjs.com           # 全球最大的开源前端库 CDN
+  - DOMAIN-SUFFIX,cdnjs.cloudflare.com
+  - DOMAIN-SUFFIX,cloudinary.com      # (第三方，但常与 CF 配合使用)
+
+  - DOMAIN-SUFFIX,cloudflareclient.com # WARP (1.1.1.1) 客户端连接与 API
+  - DOMAIN-SUFFIX,cloudflare-dns.com   # DoH (DNS over HTTPS)
+  - DOMAIN-SUFFIX,1.1.1.1              # (建议设为 DIRECT 或特定的 DNS 组)
+
+#OpenAI
+  - DOMAIN-SUFFIX,openai.com              # OpenAI 官网、API 接口及后台管理
+  - DOMAIN-SUFFIX,chatgpt.com             # ChatGPT 聊天主站 (新域名，必填)
+  - DOMAIN-SUFFIX,oaistatic.com           # ChatGPT 静态资源 (前端 JS/CSS/字体)
+  - DOMAIN-SUFFIX,oaiusercontent.com      # 用户上传内容 (图片分析、代码解释器文件)
+  - DOMAIN-SUFFIX,chat.openai.com.cdn.cloudflare.net # 备用 CDN 链路
+
+  - DOMAIN-SUFFIX,auth0.com               # 身份认证服务 (登录时必须走代理)
+  - DOMAIN-SUFFIX,identrust.com           # 证书信任服务
+  - DOMAIN-SUFFIX,stripe.com              # 支付服务 (Plus 订阅及 API 充值)
+
+  - DOMAIN-SUFFIX,intercom.io             # 客服支持与对话系统
+  - DOMAIN-SUFFIX,intercomcdn.com         # 客服系统静态资源
+  - DOMAIN-SUFFIX,featuregates.org        # 灰度测试/功能开关控制
+  - DOMAIN-SUFFIX,statsigapi.net          # 数据统计与配置分发
+  - DOMAIN-SUFFIX,openaiservice.com       # App 端特定 API 调用
+
+#Anthropic
+  - DOMAIN-SUFFIX,claude.ai           # Claude 聊天主站 (必选)
+  - DOMAIN-SUFFIX,anthropic.com       # Anthropic 官网及 API 接口 (必选)
+  - DOMAIN-SUFFIX,claude.usercontent.com # 用户上传文件、图片及 Artifacts 渲染
+
+  - DOMAIN-SUFFIX,sentry.io           # 错误监控 (Claude 依赖此项判断前端运行状态)
+  - DOMAIN-SUFFIX,intercom.io         # 客服支持与系统通知
+  - DOMAIN-SUFFIX,intercomcdn.com     # 客服系统资源加载
+  
+  - DOMAIN-SUFFIX,stripe.com          # Pro 会员订阅支付接口
+  - DOMAIN-SUFFIX,recaptcha.net       # Google 验证码 (防止登录时验证框无限转圈)
+  - DOMAIN-SUFFIX,hcaptcha.com        # 部分地区的备用人机验证
