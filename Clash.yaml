@@ -46,8 +46,10 @@ dns:
     - 180.184.1.1
     - 223.5.5.5
   nameserver:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+  fallback:
     - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
   fake-ip-filter:
     - rule-set:Direct
     - rule-set:Private
@@ -127,6 +129,10 @@ rule-providers:
 rules:
   # 拦截规则
   - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((GEOIP,CN)))),REJECT  # 阻止海外 QUIC
+
+  - DOMAIN-SUFFIX,googleapis.com,Proxy
+  - DOMAIN-SUFFIX,gvt1.com,Proxy
+  - DOMAIN-SUFFIX,android.com,Proxy
 
   - DOMAIN-SUFFIX,bkpcp.top,Direct
   - DOMAIN-SUFFIX,061899.xyz,Direct
