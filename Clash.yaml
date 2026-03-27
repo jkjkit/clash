@@ -1,6 +1,5 @@
 # ======= 基础配置 =======
-port: 7890
-socks-port: 7891
+mixed-port: 7890
 mode: rule
 ipv6: true
 allow-lan: true
@@ -10,7 +9,7 @@ external-controller: 127.0.0.1:9090
 
 log-level: warning
 bind-address: '*'
-find-process-mode: 'off'
+find-process-mode: 'always'
 keep-alive-interval: 15
 keep-alive-idle: 600
 
@@ -82,9 +81,8 @@ proxies:
 
 
 proxy-groups:
-  - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
+  - {name: Proxy, type: select, proxies: [Select,SG,HK,TW,US,UK,JP,KR,DIRECT]}
   - {name: Select, type: select, include-all: true}
-  - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
 
   - {name: HK, <<: *at, filter: *Filter-HK, include-all: true}
   - {name: TW, <<: *at, filter: *Filter-TW, include-all: true}
