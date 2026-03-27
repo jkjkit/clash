@@ -1,4 +1,4 @@
-# Clash 配置模板
+# ======= 基础配置 =======
 mixed-port: 7890
 mode: rule
 ipv6: true
@@ -85,98 +85,8 @@ Filter-UK: &Filter-UK '英国|UK|England'
 Filter-JP: &Filter-JP '日本|JP|Japan'
 Filter-KR: &Filter-KR '韩国|KR|Korea'
 Filter-SG: &Filter-SG '新加坡|SG|Singapore'
+
 # ======= 静态节点 =======
-
-proxies:
-# Clash 配置模板
-mixed-port: 7890
-mode: rule
-ipv6: true
-allow-lan: true
-unified-delay: true
-tcp-concurrent: true
-
-log-level: warning
-bind-address: '*'
-find-process-mode: 'always'
-keep-alive-interval: 15
-keep-alive-idle: 600
-
-experimental:
-  quic-go-disable-gso: true 
-
-profile:
-  store-selected: true
-  store-fake-ip: true
-
-tun:
-  enable: false
-  stack: mixed
-  dns-hijack:
-    - "any:53"
-    - "tcp://any:53"
-  auto-route: true
-  auto-redirect: true
-  auto-detect-interface: true
-
-sniffer:
-  enable: true
-  sniff:
-    HTTP:
-      ports: [80, 8080-8880]
-      override-destination: true
-    TLS:
-      ports: [443, 8443]
-    QUIC:
-      ports: [443, 8443]
-  skip-domain:
-    - "Mijia Cloud"
-    - "+.push.apple.com"
-    
-dns:
-  enable: true
-  ipv6: true
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  default-nameserver:
-    - 119.29.29.29
-    - 180.184.1.1
-    - 223.5.5.5
-  nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-  fake-ip-filter:
-    - +.miwifi.com
-    - +.docker.io
-    - +.market.xiaomi.com
-    - +.push.apple.com
-
-# ======= 锚点定义 =======
-
-# 锚点 - 节点检测 [每24小时更新一次订阅节点，每 60 秒一次健康检查]
-pr: &pr {type: http, interval: 86400, health-check: {enable: true, interval: 60, url: "http://www.gstatic.com/generate_204"}}
-
-# 锚点 - 自动选择 [每 6 秒一次惰性健康检查，容差 20ms，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
-at: &at {type: url-test, interval: 300, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
-
-# 锚点 - 故障转移 [每 6 秒一次惰性健康检查，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
-fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
-
-# 锚点 - 域名规则
-DO: &DO {type: http, behavior: domain, format: text, interval: 86400}
-# 锚点 - 地址规则
-IP: &IP {type: http, behavior: ipcidr, format: text, interval: 86400}
-
-#节点过滤 []
-Filter-HK: &Filter-HK '香港|HK|HongKong'
-Filter-TW: &Filter-TW '台湾|TW|Taiwan'
-Filter-US: &Filter-US '美国|US|America'
-Filter-UK: &Filter-UK '英国|UK|England'
-Filter-JP: &Filter-JP '日本|JP|Japan'
-Filter-KR: &Filter-KR '韩国|KR|Korea'
-Filter-SG: &Filter-SG '新加坡|SG|Singapore'
-# ======= 静态节点 =======
-
 proxies:
   - { name: usa, type: mieru, server: 151.242.183.49, port: 11000, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
   - { name: usb, type: mieru, server: 157.254.223.48, port: 33990, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
@@ -187,54 +97,13 @@ proxies:
 proxy-providers:
   Sub:
     <<: *pr
-    url: "https://jsjc.cfd/api/v1/client/subscribe?token=800e31d1172f2bddbed1cb88560ae0c7"
+    url: "订阅链接"
     path: ./profiles/proxies/subscription.yaml
 
-
+# ======= 策略组 =======
 proxy-groups:
   - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
-  - {name: Select, type: select, use: Sub}
-  - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
-
-  - {name: HK, <<: *at, filter: *Filter-HK, include-all: true}
-  - {name: TW, <<: *at, filter: *Filter-TW, include-all: true}
-  - {name: US, <<: *at, filter: *Filter-US, include-all: true}
-  - {name: UK, <<: *at, filter: *Filter-UK, include-all: true}
-  - {name: JP, <<: *at, filter: *Filter-JP, include-all: true}
-  - {name: KR, <<: *at, filter: *Filter-KR, include-all: true}
-  - {name: SG, <<: *at, filter: *Filter-SG, include-all: true}
-
-# ======= 分流规则 =======
-rule-providers:
-  do-direct:  {<<: *DO, url: https://raw.githubusercontent.com/jkjkit/clash/main/domain/direct.list}
-  do-proxy:   {<<: *DO, url: https://raw.githubusercontent.com/jkjkit/clash/main/domain/proxy.list}
-  do-reject:  {<<: *DO, url: https://raw.githubusercontent.com/jkjkit/clash/main/domain/reject.list}
-  ip-direct:  {<<: *IP, url: https://raw.githubusercontent.com/jkjkit/clash/main/ipcidr/direct.list}
-  ip-proxy:   {<<: *IP, url: https://raw.githubusercontent.com/jkjkit/clash/main/ipcidr/proxy.list}
-
-rules:
-  - RULE-SET,do-reject,REJECT
-  - RULE-SET,do-direct,DIRECT
-  - RULE-SET,do-proxy,Proxy
-  - RULE-SET,ip-direct,DIRECT
-  - RULE-SET,ip-proxy,Proxy
-  - GEOIP,CN,DIRECT
-  - MATCH,Proxy
-
-  - { name: usc, type: vless, server: saas.sin.fan, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
-  - { name: usd, type: vless, server: freeyx.cloudflare88.eu.org, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
-
-# ======= 订阅节点 =======
-proxy-providers:
-  Sub:
-    <<: *pr
-    url: "https://jsjc.cfd/api/v1/client/subscribe?token=800e31d1172f2bddbed1cb88560ae0c7"
-    path: ./profiles/proxies/subscription.yaml
-
-
-proxy-groups:
-  - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
-  - {name: Select, type: select, use: Sub}
+  - {name: Select, type: select, use: [Sub]}
   - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
 
   - {name: HK, <<: *at, filter: *Filter-HK, include-all: true}
