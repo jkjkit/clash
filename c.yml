@@ -2,12 +2,10 @@
 mixed-port: 7890
 mode: rule
 ipv6: true
-allow-lan: true
 unified-delay: true
 tcp-concurrent: true
 
 log-level: warning
-bind-address: '*'
 find-process-mode: 'always'
 keep-alive-interval: 15
 keep-alive-idle: 600
@@ -55,6 +53,9 @@ dns:
   nameserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+  fallback:
+    - https://8.8.8.8/dns-query
+    - https://1.1.1.1/dns-query
   fake-ip-filter:
     - +.miwifi.com
     - +.docker.io
@@ -81,8 +82,8 @@ IP: &IP {type: http, behavior: ipcidr, format: text, interval: 86400}
 proxies:
   - { name: usa, type: mieru, server: 151.242.183.49, port: 11000, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
   - { name: usb, type: mieru, server: 157.254.223.48, port: 33990, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
-  - { name: usc, type: vless, server: saas.sin.fan, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
-  - { name: usd, type: vless, server: freeyx.cloudflare88.eu.org, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, client-fingerprint: firefox, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
+  - { name: usc, type: vless, server: saas.sin.fan, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
+  - { name: usd, type: vless, server: freeyx.cloudflare88.eu.org, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
 
 # ======= 订阅节点 =======
 proxy-providers:
@@ -107,11 +108,11 @@ proxy-groups:
 
 # ======= 分流规则 =======
 rule-providers:
-  do-direct:  {<<: *DO, url: https://raw.githubusercontent.com/jkjkit/clash/main/domain/direct.list}
-  do-proxy:   {<<: *DO, url: https://raw.githubusercontent.com/jkjkit/clash/main/domain/proxy.list}
-  do-reject:  {<<: *DO, url: https://raw.githubusercontent.com/jkjkit/clash/main/domain/reject.list}
-  ip-direct:  {<<: *IP, url: https://raw.githubusercontent.com/jkjkit/clash/main/ipcidr/direct.list}
-  ip-proxy:   {<<: *IP, url: https://raw.githubusercontent.com/jkjkit/clash/main/ipcidr/proxy.list}
+  do-direct:  {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
+  do-proxy:   {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
+  do-reject:  {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
+  ip-direct:  {<<: *IP, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
+  ip-proxy:   {<<: *IP, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
 
 rules:
   - RULE-SET,do-reject,REJECT
