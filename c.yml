@@ -77,15 +77,6 @@ DO: &DO {type: http, behavior: domain, format: text, interval: 86400}
 # 锚点 - 地址规则
 IP: &IP {type: http, behavior: ipcidr, format: text, interval: 86400}
 
-#节点过滤 []
-Filter-HK: &Filter-HK '香港|HK|HongKong'
-Filter-TW: &Filter-TW '台湾|TW|Taiwan'
-Filter-US: &Filter-US '美国|US|America'
-Filter-UK: &Filter-UK '英国|UK|England'
-Filter-JP: &Filter-JP '日本|JP|Japan'
-Filter-KR: &Filter-KR '韩国|KR|Korea'
-Filter-SG: &Filter-SG '新加坡|SG|Singapore'
-
 # ======= 静态节点 =======
 proxies:
   - { name: usa, type: mieru, server: 151.242.183.49, port: 11000, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
