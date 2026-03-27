@@ -36,24 +36,40 @@ sniffer:
   skip-domain:
     - "Mijia Cloud"
     - "+.push.apple.com"
-
+    
 dns:
   enable: true
   ipv6: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
+  
   default-nameserver:
+    - 223.5.5.5
     - 119.29.29.29
     - 180.184.1.1
-    - 223.5.5.5
+
   nameserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+
+  fallback:
+    - https://dns.google/dns-query
+    - https://1.1.1.1/dns-query
+
+  nameserver-policy:
+    "geosite:cn": [https://dns.alidns.com/dns-query, https://doh.pub/dns-query]
+    "geosite:apple,microsoft,category-games@cn": [https://dns.alidns.com/dns-query]
+
   fake-ip-filter:
-    - +.miwifi.com
-    - +.docker.io
-    - +.market.xiaomi.com
-    - +.push.apple.com
+    - "+.lan"
+    - "+.local"
+    - "builtin:*"
+    - "stun.*.*"
+    - "+.push.apple.com"
+    - "vdt-data.volceapplog.com"
+    - "heartbeat.dm.origin.com"
+    - "*.msftnscache.com"
+    - "*.msftconnecttest.com"
 
 # ======= 锚点定义 =======
 
