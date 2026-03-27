@@ -46,37 +46,40 @@ dns:
   ipv6: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
+  
   default-nameserver:
+    - 223.5.5.5
     - 119.29.29.29
     - 180.184.1.1
-    - 223.5.5.5
+
   nameserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+
   fallback:
-    - https://8.8.8.8/dns-query
+    - https://dns.google/dns-query
     - https://1.1.1.1/dns-query
+
+  nameserver-policy:
+    "geosite:cn": [https://dns.alidns.com/dns-query, https://doh.pub/dns-query]
+    "geosite:apple,microsoft,category-games@cn": [https://dns.alidns.com/dns-query]
+
   fake-ip-filter:
-    - +.lan
-    - +.local
-    - builtin:*
-    - stun.*.*
-    - +.push.apple.com
+    - "+.lan"
+    - "+.local"
+    - "builtin:*"
+    - "stun.*.*"
+    - "+.push.apple.com"
+    - "vdt-data.volceapplog.com"
+    - "heartbeat.dm.origin.com"
+    - "*.msftnscache.com"
+    - "*.msftconnecttest.com"
 
 # ======= 锚点定义 =======
-
-# 锚点 - 节点检测 [每24小时更新一次订阅节点，每 60 秒一次健康检查]
 pr: &pr {type: http, interval: 86400, health-check: {enable: true, interval: 60, url: "http://www.gstatic.com/generate_204"}}
-
-# 锚点 - 自动选择 [每 6 秒一次惰性健康检查，容差 20ms，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
 at: &at {type: url-test, interval: 300, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, include-all-providers: true, hidden: true}
-
-# 锚点 - 故障转移 [每 6 秒一次惰性健康检查，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
 fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, include-all-providers: true, hidden: true}
-
-# 锚点 - 域名规则
 DO: &DO {type: http, behavior: domain, format: text, interval: 86400}
-# 锚点 - 地址规则
 IP: &IP {type: http, behavior: ipcidr, format: text, interval: 86400}
 
 # ======= 静态节点 =======
@@ -88,9 +91,7 @@ proxies:
 
 # ======= 订阅节点 =======
 proxy-providers:
-
   优先: {<<: *pr, url: '订阅链接', override: {additional-prefix: '[优] '}}
-  # 备用订阅源 - 次优节点集合，使用时请修改
   备用: {<<: *pr, url: '备用机场', override: {additional-prefix: '[备] '}}
 
 # ======= 策略组 =======
@@ -98,7 +99,7 @@ proxy-groups:
   - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
   - {name: Select, type: select, include-all-providers: true}
   - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
-
+  
   - {name: HK, <<: *at, filter: '香港|HK|HongKong'}
   - {name: TW, <<: *at, filter: '台湾|TW|Taiwan'}
   - {name: US, <<: *at, filter: '美国|US|America'}
@@ -110,10 +111,10 @@ proxy-groups:
 # ======= 分流规则 =======
 rule-providers:
   do-direct:  {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
-  do-proxy:   {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
-  do-reject:  {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
-  ip-direct:  {<<: *IP, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
-  ip-proxy:   {<<: *IP, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
+  do-proxy:   {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/proxy.list}
+  do-reject:  {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/reject.list}
+  ip-direct:  {<<: *IP, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/ipcidr/direct.list}
+  ip-proxy:   {<<: *IP, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/ipcidr/proxy.list}
 
 rules:
   - RULE-SET,do-reject,REJECT
