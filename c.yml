@@ -67,10 +67,10 @@ dns:
 pr: &pr {type: http, interval: 86400, health-check: {enable: true, interval: 60, url: "http://www.gstatic.com/generate_204"}}
 
 # 锚点 - 自动选择 [每 6 秒一次惰性健康检查，容差 20ms，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
-at: &at {type: url-test, interval: 300, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
+at: &at {type: url-test, interval: 300, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, include-all-providers: true, hidden: true}
 
 # 锚点 - 故障转移 [每 6 秒一次惰性健康检查，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
-fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
+fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, include-all-providers: true, hidden: true}
 
 # 锚点 - 域名规则
 DO: &DO {type: http, behavior: domain, format: text, interval: 86400}
@@ -106,13 +106,13 @@ proxy-groups:
   - {name: Select, type: select, use: [Sub]}
   - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
 
-  - {name: HK, <<: *at, filter: *Filter-HK, include-all: true}
-  - {name: TW, <<: *at, filter: *Filter-TW, include-all: true}
-  - {name: US, <<: *at, filter: *Filter-US, include-all: true}
-  - {name: UK, <<: *at, filter: *Filter-UK, include-all: true}
-  - {name: JP, <<: *at, filter: *Filter-JP, include-all: true}
-  - {name: KR, <<: *at, filter: *Filter-KR, include-all: true}
-  - {name: SG, <<: *at, filter: *Filter-SG, include-all: true}
+  - {name: HK, <<: *at, filter: '香港|HK|HongKong'}
+  - {name: TW, <<: *at, filter: '台湾|TW|Taiwan'}
+  - {name: US, <<: *at, filter: '美国|US|America'}
+  - {name: UK, <<: *at, filter: '英国|UK|England'}
+  - {name: JP, <<: *at, filter: '日本|JP|Japan'}
+  - {name: KR, <<: *at, filter: '韩国|KR|Korea'}
+  - {name: SG, <<: *at, filter: '新加坡|SG|Singapore'}
 
 # ======= 分流规则 =======
 rule-providers:
