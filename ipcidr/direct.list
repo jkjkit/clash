@@ -1,14 +1,27 @@
-# 私有地址 IPv4
-127.0.0.0/8
-10.0.0.0/8
-172.16.0.0/12
-192.168.0.0/16
-100.64.0.0/10
+# 私有地址
+192.168.0.0/16,DIRECT,no-resolve
+10.0.0.0/8,DIRECT,no-resolve
+172.16.0.0/12,DIRECT,no-resolve
+127.0.0.0/8,DIRECT,no-resolve
+100.64.0.0/10,DIRECT,no-resolve
+::1/128,DIRECT,no-resolve
+fc00::/7,DIRECT,no-resolve
+fe80::/10,DIRECT,no-resolve
+fd00::/8,DIRECT,no-resolve
 
-# 私有地址 IPv6
-::1/128
-fc00::/7
-fe80::/10
+# China
+1.255.62.0/24,no-resolve
+119.28.28.28/32,no-resolve
+182.254.116.0/24,no-resolve
+183.128.0.0/11,no-resolve
+185.188.32.0/22,no-resolve
+203.205.238.0/23,no-resolve
+203.205.254.0/23,no-resolve
+203.107.1.65/32,no-resolve
+2a0b:b580::/48,no-resolve
+2a0b:b581::/48,no-resolve
+2a0b:b582::/48,no-resolve
+2a0b:b583::/48,no-resolve
 
 # Apple
 17.0.0.0/8
