@@ -58,7 +58,7 @@ dns:
 # ======= 锚点定义 =======
 
 # 自动选择
-at: &at {type: url-test, interval: 300, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true}
+at: &at {type: url-test, interval: 300, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, include-all: true, hidden: true}
 # 故障转移
 fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
 
@@ -66,15 +66,6 @@ fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/
 DO: &DO {type: http, behavior: domain, format: text, interval: 86400}
 # 地址规则
 IP: &IP {type: http, behavior: ipcidr, format: text, interval: 86400}
-
-#节点过滤
-Filter-HK: &Filter-HK '香港|HK|HongKong'
-Filter-TW: &Filter-TW '台湾|TW|Taiwan'
-Filter-US: &Filter-US '美国|US|America'
-Filter-UK: &Filter-UK '英国|UK|England'
-Filter-JP: &Filter-JP '日本|JP|Japan'
-Filter-KR: &Filter-KR '韩国|KR|Korea'
-Filter-SG: &Filter-SG '新加坡|SG|Singapore'
 
 # ======= 代理节点 =======
 proxies: 
@@ -84,13 +75,14 @@ proxy-groups:
   - {name: Proxy, type: select, proxies: [Select,SG,HK,TW,US,UK,JP,KR,DIRECT]}
   - {name: Select, type: select, include-all: true}
 
-  - {name: HK, <<: *at, filter: *Filter-HK, include-all: true}
-  - {name: TW, <<: *at, filter: *Filter-TW, include-all: true}
-  - {name: US, <<: *at, filter: *Filter-US, include-all: true}
-  - {name: UK, <<: *at, filter: *Filter-UK, include-all: true}
-  - {name: JP, <<: *at, filter: *Filter-JP, include-all: true}
-  - {name: KR, <<: *at, filter: *Filter-KR, include-all: true}
-  - {name: SG, <<: *at, filter: *Filter-SG, include-all: true}
+  - {name: HK, <<: *at, filter: '香港|HK|HongKong'}
+  - {name: TW, <<: *at, filter: '台湾|TW|Taiwan'}
+  - {name: US, <<: *at, filter: '美国|US|America'}
+  - {name: UK, <<: *at, filter: '英国|UK|England'}
+  - {name: JP, <<: *at, filter: '日本|JP|Japan'}
+  - {name: KR, <<: *at, filter: '韩国|KR|Korea'}
+  - {name: SG, <<: *at, filter: '新加坡|SG|Singapore'}
+
 
 # ======= 分流规则 =======
 rule-providers:
