@@ -88,15 +88,15 @@ proxies:
 
 # ======= 订阅节点 =======
 proxy-providers:
-  Sub:
-    <<: *pr
-    url: "订阅链接"
-    path: ./profiles/proxies/subscription.yaml
+
+  优先: {<<: *pr, url: '订阅链接', override: {additional-prefix: '[优] '}}
+  # 备用订阅源 - 次优节点集合，使用时请修改
+  备用: {<<: *pr, url: '备用机场', override: {additional-prefix: '[备] '}}
 
 # ======= 策略组 =======
 proxy-groups:
   - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
-  - {name: Select, type: select, use: [Sub]}
+  - {name: Select, type: select, include-all-providers: true}
   - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
 
   - {name: HK, <<: *at, filter: '香港|HK|HongKong'}
