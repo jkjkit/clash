@@ -1,11 +1,16 @@
-# Apple 全服务（含 iCloud）
+# 国内基础服务
++.baidu.com
++.qq.com
++.weixin.qq.com
++.wechat.com
++.gtimg.com
++.qpic.cn
+
+# Apple 全服务
 +.apple.com
 +.icloud.com
 +.icloud-content.com
 +.mzstatic.com
-+.itunes.apple.com
-+.apps.apple.com
-+.phobos.apple.com
 +.itunes.com
 +.apple-cloudkit.com
 +.apple-livephotoskit.com
@@ -26,12 +31,22 @@
 +.aaplimg.com
 +.apple.news
 +.apple.co
++.ls.apple.com
++.mesu.apple.com
++.ocsp.apple.com
++.ocsp2.apple.com
++.crl.apple.com
++.valid.apple.com
++.apple-relay.cloudflare.com
++.apple-relay.fastly.net
 
 # 微软中国
 +.microsoft.com.cn
 +.microsoftonline.cn
 +.sharepoint.cn
 +.chinacloudapi.cn
++.azure.cn
++.trafficmanager.cn
 +.windowsupdate.com
 +.update.microsoft.com
 +.download.windowsupdate.com
@@ -40,20 +55,35 @@
 +.officecdn-microsoft-com.akamaized.net
 +.office.net
 +.office.com
-+.outlook.com
 +.office365.com
++.outlook.com
 +.bing.com
 +.msftconnecttest.com
 +.msftncsi.com
-+.azure.cn
-+.azureedge.net
-+.trafficmanager.cn
++.activation.sls.microsoft.com
++.licensing.mp.microsoft.com
++.go.microsoft.com
++.displaycatalog.mp.microsoft.com
++.telemetry.microsoft.com
++.vortex.data.microsoft.com
++.settings-win.data.microsoft.com
 
 # Steam 中国
 +.steamchina.com
 +.steam.com.cn
 +.dl.steam.clngaa.com
 +.dl.steam.ksyna.com
-+.dl.steamusercontent.com
-+.steamcdn-a.akamaihd.net.china.steamchina.com
 +.xz.pphimalayanrt.com
++.cm.steampowered.com.8686c.com
++.steampipe.akamaized.net
+
+# 国内 CDN / 云服务（隐式依赖）
++.alicdn.com
++.aliyuncs.com
++.alipayobjects.com
++.qiniucdn.com
++.qiniucs.com
++.myqcloud.com
++.tencentcos.cn
++.bdstatic.com
++.bcelive.com
