@@ -12,16 +12,23 @@ find-process-mode: 'always'
 keep-alive-interval: 15
 keep-alive-idle: 600
 
-# 实验性功能
 experimental:
   quic-go-disable-gso: true 
 
-# 配置存储
 profile:
   store-selected: true
   store-fake-ip: true
 
-# 流量嗅探
+tun:
+  enable: false
+  stack: mixed
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+
 sniffer:
   enable: true
   sniff:
@@ -33,20 +40,9 @@ sniffer:
     QUIC:
       ports: [443, 8443]
   skip-domain:
+    - "Mijia Cloud"
     - "+.push.apple.com"
-
-# TUN模式配置
-tun:
-  enable: false
-  stack: mixed
-  dns-hijack:
-    - "any:53"
-    - "tcp://any:53"
-  auto-route: true
-  auto-redirect: true
-  auto-detect-interface: true
     
-# DNS配置
 dns:
   enable: true
   ipv6: true
@@ -60,9 +56,9 @@ dns:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
   fake-ip-filter:
-    - rule-set:Direct
-    - rule-set:Private
-    - rule-set:China
+    - +.miwifi.com
+    - +.docker.io
+    - +.market.xiaomi.com
     - +.push.apple.com
 
 # ======= 锚点定义 =======
@@ -76,8 +72,10 @@ at: &at {type: url-test, interval: 300, tolerance: 20, lazy: true, url: 'http://
 # 锚点 - 故障转移 [每 6 秒一次惰性健康检查，时延超过 2 秒判定为失败，失败 3 次则自动触发健康检查]
 fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, hidden: true, include-all-providers: true}
 
-# 规则参数 [每天更新一次订阅规则，更新规则时使用Proxy策略]
-RuleSet: &RuleSet {type: http, behavior: classical, interval: 86400, format: yaml, proxy: Proxy}
+# 锚点 - 域名规则
+DO: &DO {type: http, behavior: domain, format: text, interval: 86400}
+# 锚点 - 地址规则
+IP: &IP {type: http, behavior: ipcidr, format: text, interval: 86400}
 
 #节点过滤 []
 Filter-HK: &Filter-HK '香港|HK|HongKong'
@@ -102,79 +100,33 @@ proxy-providers:
     url: "订阅链接"
     path: ./profiles/proxies/subscription.yaml
 
-# ======= 策略组 =======
-proxy-groups:
-#显示地区节点/订阅节点/静态节点
-  - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
-  - {name: Select, type: select, use: [Sub]}
-  - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
-#隐藏直接连接/广告拦截/兜底策略
-  - {name: Direct, type: select, proxies: [DIRECT], hidden: true}
-  - {name: Reject, type: select, proxies: [REJECT], hidden: true}
-  - {name: Match, type: select, proxies: [Proxy], hidden: true}
-#过滤设置
-  - {name: HK, <<: *at, filter: *Filter-HK}
-  - {name: TW, <<: *at, filter: *Filter-TW}
-  - {name: US, <<: *at, filter: *Filter-US}
-  - {name: UK, <<: *at, filter: *Filter-UK}
-  - {name: JP, <<: *at, filter: *Filter-JP}
-  - {name: KR, <<: *at, filter: *Filter-KR}
-  - {name: SG, <<: *at, filter: *Filter-SG}
 
-# ======= 规则集 =======
-BehaviorDN: &BehaviorDN {type: http, behavior: domain, format: mrs, interval: 86400}
-BehaviorIP: &BehaviorIP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
-rule-providers: 
-  Private:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Private.mrs}
-  Direct:         {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Direct.mrs}
-  AppleCN:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AppleCN.mrs}
-  Download:       {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Download.mrs}
-  XPTV:           {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/XPTV.mrs}
-  AI:             {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AI.mrs}
-  Telegram:       {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Telegram.mrs}
-  SocialMedia:    {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/SocialMedia.mrs}  
-  YouTube:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/YouTube.mrs}
-  Spotify:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Spotify.mrs}
-  Netflix:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Netflix.mrs}
-  Disney:         {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Disney.mrs}
-  HBO:            {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/HBO.mrs}
-  Proxy:          {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Proxy.mrs}
-  China:          {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/China.mrs}
-  # IP规则
-  TelegramIP:     {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Telegram.mrs}  
-  SocialMediaIP:  {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/SocialMedia.mrs}  
-  NetflixIP:      {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Netflix.mrs}
-  ProxyIP:        {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Proxy.mrs} 
-  ChinaIP:        {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/China.mrs}
-  PrivateIP:      {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Private.mrs}
-# ======= 规则 =======
+proxy-groups:
+  - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
+  - {name: Select, type: select, include-all: true}
+  - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
+
+  - {name: HK, <<: *at, filter: *Filter-HK, include-all: true}
+  - {name: TW, <<: *at, filter: *Filter-TW, include-all: true}
+  - {name: US, <<: *at, filter: *Filter-US, include-all: true}
+  - {name: UK, <<: *at, filter: *Filter-UK, include-all: true}
+  - {name: JP, <<: *at, filter: *Filter-JP, include-all: true}
+  - {name: KR, <<: *at, filter: *Filter-KR, include-all: true}
+  - {name: SG, <<: *at, filter: *Filter-SG, include-all: true}
+
+# ======= 分流规则 =======
+rule-providers:
+  do-direct:  {<<: *DO, url: https://raw.githubusercontent.com/jkjkit/clash/main/domain/direct.list}
+  do-proxy:   {<<: *DO, url: https://raw.githubusercontent.com/jkjkit/clash/main/domain/proxy.list}
+  do-reject:  {<<: *DO, url: https://raw.githubusercontent.com/jkjkit/clash/main/domain/reject.list}
+  ip-direct:  {<<: *IP, url: https://raw.githubusercontent.com/jkjkit/clash/main/ipcidr/direct.list}
+  ip-proxy:   {<<: *IP, url: https://raw.githubusercontent.com/jkjkit/clash/main/ipcidr/proxy.list}
 
 rules:
-  # 拦截规则
-  - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((GEOIP,CN)))),REJECT  # 阻止海外 QUIC
-
-  # 域名规则
-  - RULE-SET,Private,Direct
-  - RULE-SET,Direct,Direct
-  - RULE-SET,AppleCN,Direct
-  - RULE-SET,Download,Direct
-  - RULE-SET,XPTV,Direct
-  - RULE-SET,AI,Static
-  - RULE-SET,Telegram,Proxy
-  - RULE-SET,SocialMedia,Proxy
-  - RULE-SET,YouTube,Proxy
-  - RULE-SET,Spotify,Proxy
-  - RULE-SET,Netflix,Proxy
-  - RULE-SET,Disney,Proxy
-  - RULE-SET,HBO,Proxy
-  - RULE-SET,Proxy,Proxy
-  - RULE-SET,China,Direct
-  # IP规则
-  - RULE-SET,PrivateIP,Direct,no-resolve
-  - RULE-SET,TelegramIP,Proxy,no-resolve
-  - RULE-SET,SocialMediaIP,Proxy,no-resolve
-  - RULE-SET,NetflixIP,Proxy,no-resolve
-  - RULE-SET,ProxyIP,Proxy,no-resolve
-  - RULE-SET,ChinaIP,Direct
-  # 兜底规则
+  - RULE-SET,do-reject,REJECT
+  - RULE-SET,do-direct,DIRECT
+  - RULE-SET,do-proxy,Proxy
+  - RULE-SET,ip-direct,DIRECT
+  - RULE-SET,ip-proxy,Proxy
+  - GEOIP,CN,DIRECT
   - MATCH,Proxy
