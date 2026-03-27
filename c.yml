@@ -57,9 +57,10 @@ dns:
     - https://8.8.8.8/dns-query
     - https://1.1.1.1/dns-query
   fake-ip-filter:
-    - +.miwifi.com
-    - +.docker.io
-    - +.market.xiaomi.com
+    - +.lan
+    - +.local
+    - builtin:*
+    - stun.*.*
     - +.push.apple.com
 
 # ======= 锚点定义 =======
