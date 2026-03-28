@@ -1,32 +1,65 @@
-# ======= 基础配置 =======
-mixed-port: 7890
+# ==================== 锚点配置 ====================
+# 订阅锚点
+PR: &PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.google.com/generate_204', interval: 300}, filter: '^(?!.*(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author))'}
+
+# 策略锚点
+UT: &UT {type: url-test, interval: 200, lazy: true, url: 'https://www.google.com/generate_204', hidden: true}
+FB: &FB {type: fallback, interval: 200, lazy: true, url: 'https://www.google.com/generate_204', hidden: true}
+
+# 规则锚点
+DO: &DO {type: http, behavior: domain, format: mrs, interval: 86400}
+IP: &IP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
+
+# 地区筛选
+FilterHK: &FilterHK '^(?=.*(?i)(港|🇭🇰|HK|Hong|HKG))(?!.*(排除1|排除2|5x)).*$'
+FilterSG: &FilterSG '^(?=.*(?i)(坡|🇸🇬|SG|Sing|SIN|XSP))(?!.*(排除1|排除2|5x)).*$'
+FilterJP: &FilterJP '^(?=.*(?i)(日|🇯🇵|JP|Japan|NRT|HND|KIX|CTS|FUK))(?!.*(排除1|排除2|5x)).*$'
+FilterKR: &FilterKR '^(?=.*(?i)(韩|🇰🇷|韓|首尔|南朝鲜|KR|KOR|Korea|South))(?!.*(排除1|排除2|5x)).*$'
+FilterUS: &FilterUS '^(?=.*(?i)(美|🇺🇸|US|USA|SJC|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD))(?!.*(排除1|排除2|5x)).*$'
+FilterTW: &FilterTW '^(?=.*(?i)(台|🇼🇸|🇹🇼|TW|tai|TPE|TSA|KHH))(?!.*(排除1|排除2|5x)).*$'
+FilterEU: &FilterEU '^(?=.*(?i)(奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|马其它|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU))(?!.*(排除1|排除2|5x)).*$'
+FilterOT: &FilterOT '^(?!.*(DIRECT|直接连接|美|港|坡|台|新|日|韩|奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|马其它|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇭🇰|🇼🇸|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|🇦🇹|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|HK|TW|SG|JP|KR|US|GB|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW))'
+FilterAL: &FilterAL '^(?!.*(DIRECT|直接连接|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author))'
+
+# 节点排序
+SelectAL: &SelectAL   {type: select, proxies: [故障转移, 狮城自动, 香港自动, 台湾自动, 日本自动, 韩国自动, 美国自动, 欧洲自动, 🚀]}
+SelectOne: &SelectOne {type: select, proxies: [♻️, 狮城自动, 香港自动, 台湾自动, 美国自动, 欧洲自动, 日本自动, 韩国自动]}
+SelectAI: &SelectAI   {type: select, proxies: [狮城自动, ♻️, 香港自动, 台湾自动, 美国自动, 日本自动, 韩国自动, 欧洲自动]}
+
+# ==================== 代理提供者 ====================
+proxy-providers:
+  
+  优先: {<<: *PR, url: 'https://jsjc.cfd/api/v1/client/subscribe?token=800e31d1172f2bddbed1cb88560ae0c7', override: {additional-prefix: '[优] '}}
+  
+  备用: {<<: *PR, url: '备用机场', override: {additional-prefix: '[备] '}}
+
+# ==================== 核心配置 ====================
+# 基础配置
 mode: rule
+port: 7890
+socks-port: 7891
 ipv6: true
+allow-lan: true
 unified-delay: true
 tcp-concurrent: true
 
 log-level: warning
+bind-address: '*'
 find-process-mode: 'always'
 keep-alive-interval: 15
 keep-alive-idle: 600
 
+# 实验功能
 experimental:
-  quic-go-disable-gso: true 
+  quic-go-disable-gso: true  
 
+
+# 配置存储
 profile:
   store-selected: true
   store-fake-ip: true
 
-tun:
-  enable: false
-  stack: mixed
-  dns-hijack:
-    - "any:53"
-    - "tcp://any:53"
-  auto-route: true
-  auto-redirect: true
-  auto-detect-interface: true
-
+# 流量嗅探
 sniffer:
   enable: true
   sniff:
@@ -40,87 +73,110 @@ sniffer:
   skip-domain:
     - "Mijia Cloud"
     - "+.push.apple.com"
+
+# TUN模式
+tun:
+  enable: false
+  stack: mixed
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
     
+# DNS配置
 dns:
   enable: true
   ipv6: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  
   default-nameserver:
-    - 223.5.5.5
     - 119.29.29.29
     - 180.184.1.1
-
+    - 223.5.5.5
   nameserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
-
-  fallback:
-    - https://dns.google/dns-query
-    - https://1.1.1.1/dns-query
-
-  nameserver-policy:
-    "geosite:cn": [https://dns.alidns.com/dns-query, https://doh.pub/dns-query]
-    "geosite:apple,microsoft,category-games@cn": [https://dns.alidns.com/dns-query]
-
   fake-ip-filter:
-    - "+.lan"
-    - "+.local"
-    - "builtin:*"
-    - "stun.*.*"
-    - "+.push.apple.com"
-    - "vdt-data.volceapplog.com"
-    - "heartbeat.dm.origin.com"
-    - "*.msftnscache.com"
-    - "*.msftconnecttest.com"
+    - rule-set:Direct
+    - rule-set:Private
+    - rule-set:China
+    - +.miwifi.com
+    - +.docker.io
+    - +.market.xiaomi.com
+    - +.push.apple.com
 
-# ======= 锚点定义 =======
-pr: &pr {type: http, interval: 86400, health-check: {enable: true, interval: 60, url: "http://www.gstatic.com/generate_204"}}
-at: &at {type: url-test, interval: 300, tolerance: 20, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, include-all-providers: true, hidden: true}
-fb: &fb {type: fallback, interval: 300, lazy: true, url: 'http://www.google.com/blank.html', disable-udp: false, timeout: 2000, max-failed-times: 3, include-all-providers: true, hidden: true}
-DO: &DO {type: http, behavior: domain, format: text, interval: 86400}
-IP: &IP {type: http, behavior: ipcidr, format: text, interval: 86400}
-
-# ======= 静态节点 =======
-proxies:
-  - { name: usa, type: mieru, server: 151.242.183.49, port: 11000, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
-  - { name: usb, type: mieru, server: 157.254.223.48, port: 33990, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
-  - { name: usc, type: vless, server: saas.sin.fan, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
-  - { name: usd, type: vless, server: freeyx.cloudflare88.eu.org, port: 443, network: ws, tls: true, servername: sni.111000.dynv6.net, UUID: 6202b230-417c-4d8e-b624-0f71afa9c75d, ws-opts: { path: "/?ed=2560&proxyip=ip.111000.de5.net:443", headers: { Host: sni.111000.dynv6.net } }, ech-opts: { enable: true, query-server-name: cloudflare-ech.com } }
-
-# ======= 订阅节点 =======
-proxy-providers:
-  优先: {<<: *pr, url: '订阅链接', override: {additional-prefix: '[优] '}}
-  备用: {<<: *pr, url: '备用机场', override: {additional-prefix: '[备] '}}
-
-# ======= 策略组 =======
+# ==================== 策略组 ====================
 proxy-groups:
-  - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
-  - {name: Select, type: select, include-all-providers: true}
-  - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
+  - {name: ♻️,  <<: *SelectAL}
+  - {name: 🛩️,  <<: *SelectAI}
+  - {name: 🌈,  <<: *SelectOne}  
+  - {name: 🚀,  type: select, include-all: true, filter: *FilterAL}
   
-  - {name: HK, <<: *at, filter: '香港|HK|HongKong'}
-  - {name: TW, <<: *at, filter: '台湾|TW|Taiwan'}
-  - {name: US, <<: *at, filter: '美国|US|America'}
-  - {name: UK, <<: *at, filter: '英国|UK|England'}
-  - {name: JP, <<: *at, filter: '日本|JP|Japan'}
-  - {name: KR, <<: *at, filter: '韩国|KR|Korea'}
-  - {name: SG, <<: *at, filter: '新加坡|SG|Singapore'}
+  - {name: 故障转移,  <<: *FB, proxies: [香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 🚀]}
+  - {name: 🇨🇳,  type: select, proxies: [DIRECT], hidden: true}
+  - {name: 香港自动,  <<: *UT, filter: *FilterHK, include-all: true}
+  - {name: 台湾自动,  <<: *UT, filter: *FilterTW, include-all: true}
+  - {name: 日本自动,  <<: *UT, filter: *FilterJP, include-all: true}
+  - {name: 狮城自动,  <<: *UT, filter: *FilterSG, include-all: true}
+  - {name: 韩国自动,  <<: *UT, filter: *FilterKR, include-all: true}
+  - {name: 美国自动,  <<: *UT, filter: *FilterUS, include-all: true}
+  - {name: 欧洲自动,  <<: *UT, filter: *FilterEU, include-all: true}
 
-# ======= 分流规则 =======
-rule-providers:
-  do-direct:  {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/direct.list}
-  do-proxy:   {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/proxy.list}
-  do-reject:  {<<: *DO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/domain/reject.list}
-  ip-direct:  {<<: *IP, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/ipcidr/direct.list}
-  ip-proxy:   {<<: *IP, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/ipcidr/proxy.list}
+# ==================== 规则集 ====================
 
-rules:
-  - RULE-SET,do-reject,REJECT
-  - RULE-SET,do-direct,DIRECT
-  - RULE-SET,do-proxy,Proxy
-  - RULE-SET,ip-direct,DIRECT
-  - RULE-SET,ip-proxy,Proxy
-  - GEOIP,CN,DIRECT
-  - MATCH,Proxy
+rule-providers: 
+  Private:        {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Private.mrs}
+  Direct:         {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Direct.mrs}
+  AppleCN:        {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AppleCN.mrs}
+  Download:       {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Download.mrs}
+  XPTV:           {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/XPTV.mrs}
+  AI:             {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AI.mrs}
+  Telegram:       {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Telegram.mrs}
+  SocialMedia:    {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/SocialMedia.mrs}  
+  YouTube:        {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/YouTube.mrs}
+  Spotify:        {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Spotify.mrs}
+  Netflix:        {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Netflix.mrs}
+  Disney:         {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Disney.mrs}
+  HBO:            {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/HBO.mrs}
+  Proxy:          {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Proxy.mrs}
+  China:          {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/China.mrs}
+  # IP规则
+  TelegramIP:     {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Telegram.mrs}  
+  SocialMediaIP:  {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/SocialMedia.mrs}  
+  NetflixIP:      {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Netflix.mrs}
+  ProxyIP:        {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Proxy.mrs} 
+  ChinaIP:        {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/China.mrs}
+  PrivateIP:      {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Private.mrs}
+
+# ==================== 规则路由 ====================
+rules: 
+  # 拦截规则
+  - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((GEOIP,CN)))),REJECT  # 阻止海外 QUIC
+
+  # 域名规则
+  - RULE-SET,Private,🇨🇳
+  - RULE-SET,Direct,🇨🇳
+  - RULE-SET,AppleCN,🇨🇳
+  - RULE-SET,Download,🇨🇳
+  - RULE-SET,XPTV,🇨🇳
+  - RULE-SET,AI,🛩️
+  - RULE-SET,Telegram,🌈
+  - RULE-SET,SocialMedia,🌈
+  - RULE-SET,YouTube,🌈
+  - RULE-SET,Spotify,🌈
+  - RULE-SET,Netflix,🌈
+  - RULE-SET,Disney,🌈
+  - RULE-SET,HBO,🌈
+  - RULE-SET,Proxy,♻️
+  - RULE-SET,China,🇨🇳
+  # IP规则
+  - RULE-SET,PrivateIP,🇨🇳,no-resolve
+  - RULE-SET,TelegramIP,🌈,no-resolve
+  - RULE-SET,SocialMediaIP,🌈,no-resolve
+  - RULE-SET,NetflixIP,🌈,no-resolve
+  - RULE-SET,ProxyIP,♻️,no-resolve
+  - RULE-SET,ChinaIP,🇨🇳
+  # 兜底规则
+  - MATCH,♻️
