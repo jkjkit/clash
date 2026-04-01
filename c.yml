@@ -1,26 +1,17 @@
-# ==================== 锚点配置 ====================
-# 订阅锚点
-PR: &PR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.google.com/generate_204', interval: 300}}
+# ===== 锚点定义 =====
+BaseProvider: &BaseProvider {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.google.com/generate_204', interval: 300}, filter: '^(?!.*(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author))'}
 
-# 策略锚点
-UT: &UT {type: url-test, interval: 200, lazy: true, url: 'https://www.google.com/generate_204', hidden: true}
-FB: &FB {type: fallback, interval: 200, lazy: true, url: 'https://www.google.com/generate_204', hidden: true}
+BaseUT: &BaseUT {type: url-test, interval: 200, lazy: true, url: 'https://www.google.com/generate_204', hidden: true}
+BaseFB: &BaseFB {type: fallback, interval: 200, lazy: true, url: 'https://www.google.com/generate_204', hidden: true}
 
-# 规则锚点
-DO: &DO {type: http, behavior: domain, format: mrs, interval: 86400}
-IP: &IP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
-
-# ==================== 订阅管理 ====================
+# ===== 订阅管理 =====
 proxy-providers:
-  
-  优先: {<<: *PR, url: '订阅链接', override: {additional-prefix: '[优] '}}
-  备用: {<<: *PR, url: '备用机场', override: {additional-prefix: '[备] '}}
+  优先: {<<: *BaseProvider, url: '订阅链接', override: {additional-prefix: '[优] '}}
+  备用: {<<: *BaseProvider, url: '备用订阅', override: {additional-prefix: '[备] '}}
 
-# ==================== 核心配置 ====================
-# 基础配置
-mode: rule
+# ===== 基础配置 =====
 port: 7890
-socks-port: 7891
+mode: rule
 ipv6: true
 allow-lan: true
 unified-delay: true
@@ -32,32 +23,43 @@ find-process-mode: 'always'
 keep-alive-interval: 15
 keep-alive-idle: 600
 
-# 认证配置
+# ===== 虚拟网卡 =====
+tun:
+  enable: false
+  stack: mixed
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+
+# ===== 认证配置 =====
 authentication:
-  - mihomo:admin
+  - mihomo:yyds666
 skip-auth-prefixes:
   - 192.168.1.0/24
   - 192.168.31.0/24
   - 192.168.100.0/24
   - 127.0.0.1/8
-
-# 实验功能
-experimental:
-  quic-go-disable-gso: true  
-     
-# 管理面板
+  
+# ===== 管理面板 =====
 external-ui-url: https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip
 external-ui-name: zashboard
 external-ui: ui
 external-controller: 127.0.0.1:9090
-secret: admin
+secret: yyds666
 
-# 配置存储
+# ===== 实验功能 =====
+experimental:
+  quic-go-disable-gso: true  
+
+# ===== 配置存储 =====
 profile:
   store-selected: true
   store-fake-ip: true
 
-# 流量嗅探
+# ===== 流量嗅探 =====
 sniffer:
   enable: true
   sniff:
@@ -72,18 +74,7 @@ sniffer:
     - "Mijia Cloud"
     - "+.push.apple.com"
 
-# TUN模式
-tun:
-  enable: false
-  stack: mixed
-  dns-hijack:
-    - "any:53"
-    - "tcp://any:53"
-  auto-route: true
-  auto-redirect: true
-  auto-detect-interface: true
-    
-# DNS配置
+# =====DNS配置 =====
 dns:
   enable: true
   ipv6: true
@@ -105,66 +96,67 @@ dns:
     - +.market.xiaomi.com
     - +.push.apple.com
 
-# ==================== 策略组 ====================
-proxy-groups:
-  - {name: Proxy, type: select, proxies: [Select,DIRECT,Static,SG,HK,TW,US,UK,JP,KR]}
-  - {name: Select, type: select, include-all-providers: true}
-  - {name: Static, type: select, proxies: [usa,usb,usc,usd]}
-  - {name: Direct, type: select, proxies: [DIRECT]}
-  - {name: Match, type: select, proxies: [Failover]}
-
-  - {name: Failover,  <<: *FB, include-all-providers: true]}
-
-  - {name: HK, <<: *UT, filter: '香港|🇭🇰|HK|HongKong'}
-  - {name: TW, <<: *UT, filter: '台湾|🇹🇼|TW|Taiwan'}
-  - {name: US, <<: *UT, filter: '美国|🇺🇸|US|America'}
-  - {name: EU, <<: *UT, filter: '德国|🇩🇪|法国|🇫🇷|英国|🇬🇧|瑞士|🇨🇭|芬兰|🇫🇮|希腊|🇬🇷|奥地利|🇦🇹|意大利|🇮🇹'}
-  - {name: JP, <<: *UT, filter: '日本|🇯🇵|JP|Japan'}
-  - {name: KR, <<: *UT, filter: '韩国|🇰🇷|KR|Korea'}
-  - {name: SG, <<: *UT, filter: '狮城|🇸🇬|SG|Singapore|新加坡'}
+# ===== 节点列表 =====
+proxies:
+  - {name: "usa", type: mieru, server: 151.242.183.49, port: 11000, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
+  - {name: "usb", type: mieru, server: 157.254.223.48, port: 33990, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
+  - {name: "usc", type: mieru, server: 45.221.98.11, port: 28866, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}  
+  - {name: "usd", type: tuic, server: ip1.758733.xyz, port: 10088, sni: apple.com, skip-cert-verify: true, alpn: [h3], udp: true, congestion-controller: bbr, disable-sni: false, password: dongtaiwang.com, udp-relay-mode: native, uuid: 9bbd1f42-7ae7-4239-bd10-a68de95e3295, version: 5}
   
-# ==================== 规则订阅 ====================
+# ===== 分流策略 =====
+proxy-groups:
 
-rule-providers:
-  # 域名规则
-  Tracking:       {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Tracking.mrs}
-  Advertising:    {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Advertising.mrs} 
-  Private:        {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Private.mrs}
-  Direct:         {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Direct.mrs}
-  AppleCN:        {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AppleCN.mrs}
-  Download:       {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Download.mrs}
-  XPTV:           {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/XPTV.mrs}
-  AI:             {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AI.mrs}
-  Telegram:       {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Telegram.mrs}
-  SocialMedia:    {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/SocialMedia.mrs}  
-  YouTube:        {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/YouTube.mrs}
-  Spotify:        {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Spotify.mrs}
-  Netflix:        {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Netflix.mrs}
-  Disney:         {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Disney.mrs}
-  HBO:            {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/HBO.mrs}
-  Proxy:          {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Proxy.mrs}
-  China:          {<<: *DO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/China.mrs}
+  - {name: Proxy,  type: select, proxies: [Select, Static, HK, TW, SG, JP, KR, US, EU, UN]}
+  - {name: Select, type: select, include-all: true}
+  - {name: Static, type: select, proxies: [usa, usb, usc, usd]}
+  
+  - {name: SG,  <<: *BaseUT, filter: "SG|狮城", include-all: true}
+  - {name: HK,  <<: *BaseUT, filter: "HK|香港", include-all: true}
+  - {name: TW,  <<: *BaseUT, filter: "TW|台湾", include-all: true}
+  - {name: JP,  <<: *BaseUT, filter: "JP|日本", include-all: true}
+  - {name: KR,  <<: *BaseUT, filter: "KR|韩国", include-all: true}
+  - {name: US,  <<: *BaseUT, filter: "US|美国", include-all: true}
+  - {name: EU,  <<: *BaseUT, filter: "UK|英国", include-all: true}
+  - {name: UN,  <<: *BaseUT, filter: "TH|泰国", include-all: true} 
+  
+# ===== 规则订阅 =====
+BehaviorDN: &BehaviorDN {type: http, behavior: domain, format: mrs, interval: 86400}
+BehaviorIP: &BehaviorIP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
+rule-providers: 
+  Private:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Private.mrs}
+  Direct:         {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Direct.mrs}
+  AppleCN:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AppleCN.mrs}
+  Download:       {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Download.mrs}
+  XPTV:           {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/XPTV.mrs}
+  AI:             {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AI.mrs}
+  Telegram:       {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Telegram.mrs}
+  SocialMedia:    {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/SocialMedia.mrs}  
+  YouTube:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/YouTube.mrs}
+  Spotify:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Spotify.mrs}
+  Netflix:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Netflix.mrs}
+  Disney:         {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Disney.mrs}
+  HBO:            {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/HBO.mrs}
+  Proxy:          {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Proxy.mrs}
+  China:          {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/China.mrs}
   # IP规则
-  AdvertisingIP:  {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Advertising.mrs} 
-  TelegramIP:     {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Telegram.mrs}  
-  SocialMediaIP:  {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/SocialMedia.mrs}  
-  NetflixIP:      {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Netflix.mrs}
-  ProxyIP:        {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Proxy.mrs} 
-  ChinaIP:        {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/China.mrs}
-  PrivateIP:      {<<: *IP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Private.mrs}
+  TelegramIP:     {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Telegram.mrs}  
+  SocialMediaIP:  {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/SocialMedia.mrs}  
+  NetflixIP:      {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Netflix.mrs}
+  ProxyIP:        {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Proxy.mrs} 
+  ChinaIP:        {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/China.mrs}
+  PrivateIP:      {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Private.mrs}
 
-# ==================== 规则路由 ====================
+# ===== 规则路由 =====
 rules: 
   # 拦截规则
-  - RULE-SET,Tracking,REJECT
-  - RULE-SET,Advertising,REJECT  
+  - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((GEOIP,CN)))),REJECT  # 阻止海外 QUIC
 
   # 域名规则
-  - RULE-SET,Private,Direct
-  - RULE-SET,Direct,Direct
-  - RULE-SET,AppleCN,Direct
-  - RULE-SET,Download,Direct
-  - RULE-SET,XPTV,Direct
+  - RULE-SET,Private,DIRECT
+  - RULE-SET,Direct,DIRECT
+  - RULE-SET,AppleCN,DIRECT
+  - RULE-SET,Download,DIRECT
+  - RULE-SET,XPTV,DIRECT
   - RULE-SET,AI,Select
   - RULE-SET,Telegram,Proxy
   - RULE-SET,SocialMedia,Proxy
@@ -174,14 +166,13 @@ rules:
   - RULE-SET,Disney,Proxy
   - RULE-SET,HBO,Proxy
   - RULE-SET,Proxy,Proxy
-  - RULE-SET,China,Direct
+  - RULE-SET,China,DIRECT
   # IP规则
-  - RULE-SET,AdvertisingIP,REJECT,no-resolve  
-  - RULE-SET,PrivateIP,Direct,no-resolve
+  - RULE-SET,PrivateIP,DIRECT,no-resolve
   - RULE-SET,TelegramIP,Proxy,no-resolve
   - RULE-SET,SocialMediaIP,Proxy,no-resolve
   - RULE-SET,NetflixIP,Proxy,no-resolve
   - RULE-SET,ProxyIP,Proxy,no-resolve
-  - RULE-SET,ChinaIP,Direct
+  - RULE-SET,ChinaIP,DIRECT
   # 兜底规则
   - MATCH,Proxy
