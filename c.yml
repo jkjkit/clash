@@ -1,13 +1,40 @@
 # ===== 锚点定义 =====
-BaseProvider: &BaseProvider {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.google.com/generate_204', interval: 300}, filter: '^(?!.*(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author))'}
+BasePR: &BasePR {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.google.com/generate_204', interval: 300}, filter: '^(?!.*(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author))'}
 
 BaseUT: &BaseUT {type: url-test, interval: 200, lazy: true, url: 'https://www.google.com/generate_204', hidden: true}
 BaseFB: &BaseFB {type: fallback, interval: 200, lazy: true, url: 'https://www.google.com/generate_204', hidden: true}
 
+BaseDO: &BaseDO {type: http, behavior: domain, format: mrs, interval: 86400}
+BaseIP: &BaseIP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
+BaseMY: &BaseMY {type: http, behavior: domain, format: text, interval: 86400}
+
 # ===== 订阅管理 =====
 proxy-providers:
-  优先: {<<: *BaseProvider, url: '订阅链接', override: {additional-prefix: '[优] '}}
-  备用: {<<: *BaseProvider, url: '备用订阅', override: {additional-prefix: '[备] '}}
+  优质服务商: {<<: *BasePR, url: '订阅链接', override: {additional-prefix: '[优] '}}
+  备用服务商: {<<: *BasePR, url: '备用订阅', override: {additional-prefix: '[备] '}}
+
+# ===== 节点列表 =====
+proxies:
+  - {name: "usa", type: mieru, server: 151.242.183.49, port: 11000, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
+  - {name: "usb", type: mieru, server: 157.254.223.48, port: 33990, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
+  - {name: "usc", type: mieru, server: 45.221.98.11, port: 28866, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}  
+  - {name: "usd", type: tuic, server: ip1.758733.xyz, port: 10088, sni: apple.com, skip-cert-verify: true, alpn: [h3], udp: true, congestion-controller: bbr, disable-sni: false, password: dongtaiwang.com, udp-relay-mode: native, uuid: 9bbd1f42-7ae7-4239-bd10-a68de95e3295, version: 5}
+  
+# ===== 分流策略 =====
+proxy-groups:
+
+  - {name: Proxy,  type: select, proxies: [Select, Static, HK, TW, SG, JP, KR, US, EU, UN]}
+  - {name: Select, type: select, include-all-providers: true}
+  - {name: Static, type: select, proxies: [usa, usb, usc, usd]}
+  
+  - {name: SG,  <<: *BaseUT, filter: "🇸🇬|SG|狮城|新加坡|Singapore", include-all: true}
+  - {name: HK,  <<: *BaseUT, filter: "🇭🇰|HK|香港|HongKong", include-all: true}
+  - {name: TW,  <<: *BaseUT, filter: "🇹🇼|TW|台湾|TaiWan", include-all: true}
+  - {name: JP,  <<: *BaseUT, filter: "🇯🇵|JP|日本|Japan", include-all: true}
+  - {name: KR,  <<: *BaseUT, filter: "🇰🇷|KR|韩国|Korean", include-all: true}
+  - {name: US,  <<: *BaseUT, filter: "🇺🇸|US|美国|America", include-all: true}
+  - {name: EU,  <<: *BaseUT, filter: "🇪🇺|UK|英国|FA|法国|DE|德国|CH|瑞士|SE|瑞典|DK|丹麦|FI|芬兰|GR|希腊|IT|意大利|ES|西班牙|PT|葡萄牙|IE|爱尔兰|UA|乌克兰", include-all: true}
+  - {name: UN,  <<: *BaseUT, filter: "CA|加拿大|TH|泰国|VN|越南|BR|巴西|CL|智利|AU|澳大利亚|IL|以色列|RU|俄罗斯|MX|墨西哥|NZ|新西兰", include-all: true} 
 
 # ===== 基础配置 =====
 port: 7890
@@ -95,61 +122,47 @@ dns:
     - +.docker.io
     - +.market.xiaomi.com
     - +.push.apple.com
-
-# ===== 节点列表 =====
-proxies:
-  - {name: "usa", type: mieru, server: 151.242.183.49, port: 11000, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
-  - {name: "usb", type: mieru, server: 157.254.223.48, port: 33990, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}
-  - {name: "usc", type: mieru, server: 45.221.98.11, port: 28866, multiplexing: MULTIPLEXING_LOW, password: dongtaiwang.com, transport: TCP, username: dongtaiwang.com}  
-  - {name: "usd", type: tuic, server: ip1.758733.xyz, port: 10088, sni: apple.com, skip-cert-verify: true, alpn: [h3], udp: true, congestion-controller: bbr, disable-sni: false, password: dongtaiwang.com, udp-relay-mode: native, uuid: 9bbd1f42-7ae7-4239-bd10-a68de95e3295, version: 5}
-  
-# ===== 分流策略 =====
-proxy-groups:
-
-  - {name: Proxy,  type: select, proxies: [Select, Static, HK, TW, SG, JP, KR, US, EU, UN]}
-  - {name: Select, type: select, include-all: true}
-  - {name: Static, type: select, proxies: [usa, usb, usc, usd]}
-  
-  - {name: SG,  <<: *BaseUT, filter: "SG|狮城", include-all: true}
-  - {name: HK,  <<: *BaseUT, filter: "HK|香港", include-all: true}
-  - {name: TW,  <<: *BaseUT, filter: "TW|台湾", include-all: true}
-  - {name: JP,  <<: *BaseUT, filter: "JP|日本", include-all: true}
-  - {name: KR,  <<: *BaseUT, filter: "KR|韩国", include-all: true}
-  - {name: US,  <<: *BaseUT, filter: "US|美国", include-all: true}
-  - {name: EU,  <<: *BaseUT, filter: "UK|英国", include-all: true}
-  - {name: UN,  <<: *BaseUT, filter: "TH|泰国", include-all: true} 
   
 # ===== 规则订阅 =====
-BehaviorDN: &BehaviorDN {type: http, behavior: domain, format: mrs, interval: 86400}
-BehaviorIP: &BehaviorIP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
 rule-providers: 
-  Private:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Private.mrs}
-  Direct:         {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Direct.mrs}
-  AppleCN:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AppleCN.mrs}
-  Download:       {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Download.mrs}
-  XPTV:           {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/XPTV.mrs}
-  AI:             {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AI.mrs}
-  Telegram:       {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Telegram.mrs}
-  SocialMedia:    {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/SocialMedia.mrs}  
-  YouTube:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/YouTube.mrs}
-  Spotify:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Spotify.mrs}
-  Netflix:        {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Netflix.mrs}
-  Disney:         {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Disney.mrs}
-  HBO:            {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/HBO.mrs}
-  Proxy:          {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Proxy.mrs}
-  China:          {<<: *BehaviorDN, url: https://github.com/666OS/rules/raw/release/mihomo/domain/China.mrs}
+
+  MyDirect:       {<<: *BaseMY, url: https://raw.githubusercontent.com/jkjkit/clash/refs/heads/main/domain/direct.list}
+  MyProxy:        {<<: *BaseMY, url: https://raw.githubusercontent.com/jkjkit/clash/refs/heads/main/domain/proxy.list}
+
+  Tracking:       {<<: *BaseDO, url: https://github.com/666OS/rules/blob/release/mihomo/domain/Tracking.mrs}
+  Advertising:    {<<: *BaseDO, url: https://github.com/666OS/rules/blob/release/mihomo/domain/Advertising.mrs}
+  Private:        {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Private.mrs}
+  Direct:         {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Direct.mrs}
+  AppleCN:        {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AppleCN.mrs}
+  Download:       {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Download.mrs}
+  XPTV:           {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/XPTV.mrs}
+  AI:             {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AI.mrs}
+  Telegram:       {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Telegram.mrs}
+  SocialMedia:    {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/SocialMedia.mrs}  
+  YouTube:        {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/YouTube.mrs}
+  Spotify:        {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Spotify.mrs}
+  Netflix:        {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Netflix.mrs}
+  Disney:         {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Disney.mrs}
+  HBO:            {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/HBO.mrs}
+  Proxy:          {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Proxy.mrs}
+  China:          {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/China.mrs}
   # IP规则
-  TelegramIP:     {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Telegram.mrs}  
-  SocialMediaIP:  {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/SocialMedia.mrs}  
-  NetflixIP:      {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Netflix.mrs}
-  ProxyIP:        {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Proxy.mrs} 
-  ChinaIP:        {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/China.mrs}
-  PrivateIP:      {<<: *BehaviorIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Private.mrs}
+  TelegramIP:     {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Telegram.mrs}  
+  SocialMediaIP:  {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/SocialMedia.mrs}  
+  NetflixIP:      {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Netflix.mrs}
+  ProxyIP:        {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Proxy.mrs} 
+  ChinaIP:        {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/China.mrs}
+  PrivateIP:      {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Private.mrs}
 
 # ===== 规则路由 =====
 rules: 
   # 拦截规则
   - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((GEOIP,CN)))),REJECT  # 阻止海外 QUIC
+  - RULE-SET,Tracking,REJECT
+  - RULE-SET,Advertising,REJECT
+  
+  - RULE-SET,MyDirect,DIRECT
+  - RULE-SET,MyProxy,Proxy
 
   # 域名规则
   - RULE-SET,Private,DIRECT
