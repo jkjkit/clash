@@ -130,6 +130,7 @@ rule-providers:
   Direct:         {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Direct.mrs}
   AppleCN:        {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AppleCN.mrs}
   Download:       {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Download.mrs}
+  Google:         {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Google.mrs}
   XPTV:           {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/XPTV.mrs}
   AI:             {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/AI.mrs}
   Telegram:       {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Telegram.mrs}
@@ -142,8 +143,9 @@ rule-providers:
   Proxy:          {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/Proxy.mrs}
   China:          {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/domain/China.mrs}
   # IP规则
-  TelegramIP:     {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Telegram.mrs}  
-  SocialMediaIP:  {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/SocialMedia.mrs}  
+  TelegramIP:     {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Telegram.mrs}
+  GoogleIP:         {<<: *BaseDO, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Google.mrs}
+  SocialMediaIP:  {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/SocialMedia.mrs}
   NetflixIP:      {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Netflix.mrs}
   ProxyIP:        {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/Proxy.mrs} 
   ChinaIP:        {<<: *BaseIP, url: https://github.com/666OS/rules/raw/release/mihomo/ip/China.mrs}
@@ -166,6 +168,7 @@ rules:
   - RULE-SET,Download,DIRECT
   - RULE-SET,XPTV,DIRECT
   - RULE-SET,AI,Select
+  - RULE-SET,Google,Proxy
   - RULE-SET,Telegram,Proxy
   - RULE-SET,SocialMedia,Proxy
   - RULE-SET,YouTube,Proxy
@@ -178,9 +181,11 @@ rules:
   # IP规则
   - RULE-SET,PrivateIP,DIRECT,no-resolve
   - RULE-SET,TelegramIP,Proxy,no-resolve
+  - RULE-SET,GoogleIP,Proxy,no-resolve
   - RULE-SET,SocialMediaIP,Proxy,no-resolve
   - RULE-SET,NetflixIP,Proxy,no-resolve
   - RULE-SET,ProxyIP,Proxy,no-resolve
   - RULE-SET,ChinaIP,DIRECT
+
   # 兜底规则
   - MATCH,Proxy
