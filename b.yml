@@ -8,7 +8,7 @@ BaseDO: &BaseDO {type: http, behavior: domain, format: mrs, interval: 86400}
 BaseIP: &BaseIP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
 BaseMY: &BaseMY {type: http, behavior: domain, format: text, interval: 86400}
 
-# ===== 订阅链接 =====
+# ===== 机场订阅 =====
 proxy-providers:
   优先: {<<: *BasePR, url: '订阅链接', override: {additional-prefix: '[优] '}}
   备用: {<<: *BasePR, url: '备用订阅', override: {additional-prefix: '[备] '}}
@@ -17,7 +17,8 @@ proxy-providers:
 proxies:
 
 # ===== 全局配置 =====
- mixed-port: 7890
+mode: rule
+mixed-port: 7890
 allow-lan: true
 bind-address: "*"
 ipv6: false
@@ -89,7 +90,7 @@ proxy-groups:
   - {name: EU,  <<: *BaseUT, filter: "🇪🇺|UK|英国|FA|法国|DE|德国|CH|瑞士|SE|瑞典|DK|丹麦|FI|芬兰|GR|希腊|IT|意大利|ES|西班牙|PT|葡萄牙|IE|爱尔兰|UA|乌克兰", include-all: true}
   - {name: UN,  <<: *BaseUT, filter: "CA|加拿大|TH|泰国|VN|越南|BR|巴西|CL|智利|AU|澳大利亚|IL|以色列|RU|俄罗斯|MX|墨西哥|NZ|新西兰", include-all: true} 
 
-# ===== 规定订阅 =====
+# ===== 规则订阅 =====
 rule-providers: 
   fakeipfilter:     { <<: *BaseDO, url: "https://raw.githubusercontent.com/wwqgtxx/clash-rules/release/fakeip-filter.mrs"}
   private_domain:   { <<: *BaseDO, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
@@ -116,7 +117,7 @@ rule-providers:
   netflix_ip:       { <<: *BaseIP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
   apple_ip:         { <<: *BaseIP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geoip/apple.mrs"}
   
-# ===== 规则路由 =====
+# ===== 规则匹配 =====
 rules:
   - RULE-SET,private_ip,DIRECT,no-resolve
   - RULE-SET,private_domain,DIRECT
