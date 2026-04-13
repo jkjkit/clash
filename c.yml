@@ -24,7 +24,7 @@ proxies:
 proxy-groups:
 
   - {name: Proxy,  type: select, proxies: [Select, Static, HK, TW, SG, JP, KR, US, EU, UN]}
-  - {name: Select, type: select, include-all-providers: true}
+  - {name: Select, type: select, include-all: true}
   - {name: Static, type: select, proxies: [usa, usb, usc, usd]}
   
   - {name: SG,  <<: *BaseUT, filter: "🇸🇬|SG|狮城|新加坡|Singapore", include-all: true}
