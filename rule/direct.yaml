@@ -1,4 +1,5 @@
 payload:
+  - +.090227.xyz
   - +.0033.cn
   - +.00cdn.com
   - +.0123456789.com
@@ -211,6 +212,7 @@ payload:
   - +.40017.cn
   - +.40407.com
   - +.423down.com
+  - +.4275.com
   - +.42r.cn
   - +.4399.cn
   - +.4399.com
@@ -2497,6 +2499,7 @@ payload:
   - +.ezpro.pro
   - +.ezviz.com
   - +.f.cx
+  - +.fagedongxi.com
   - +.faasapp.cn
   - +.faasdev.cn
   - +.faceu.com
@@ -4145,6 +4148,7 @@ payload:
   - +.lg3000.top
   - +.lgstatic.com
   - +.lhzq.com
+  - +.link3.cc
   - +.liangxinyao.com
   - +.lianjia.com
   - +.lianmeng.360.cn
@@ -5308,6 +5312,7 @@ payload:
   - +.rwkv.cn
   - +.rwkv.com
   - +.rzrc114.com
+  - +.shz.al
   - +.s.360.cn
   - +.s.so.360.cn
   - +.s.union.360.cn
@@ -6203,6 +6208,7 @@ payload:
   - +.ugslb2.net
   - +.uhasadmin.com
   - +.uiwow.com
+  - +.ulpb.app
   - +.ulikecam.com
   - +.ulogs.umeng.com
   - +.ulogs.umengcloud.com
@@ -7336,7 +7342,6 @@ payload:
   - cache.pack.google.com
   - cache-management-prod.google.com
   - captive.apple.com
-  - ccll.xyz
   - cdn.apple-mapkit.com
   - cdn.marketplaceimages.windowsphone.com
   - cdn1.apple-mapkit.com
