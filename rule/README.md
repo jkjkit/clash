@@ -1,4 +1,5 @@
-`BaseDO: &BaseDO {type: http, behavior: domain, format: mrs, interval: 86400}
+```YAML
+BaseDO: &BaseDO {type: http, behavior: domain, format: mrs, interval: 86400}
 BaseIP: &BaseIP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
 
 # ===== 规则订阅 =====
@@ -34,4 +35,6 @@ rules:
 
 # 兜底规则
   - GEOIP,CN,DIRECT
-  - MATCH,Proxy`
+  - MATCH,Proxy
+
+```
