@@ -6,15 +6,15 @@ BaseIP: &BaseIP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
 rule-providers: 
 
 # 域名规则
-  direct:    {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/direct.mrs, path: ./Rules/direct.mrs}
-  proxy:     {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/proxy.mrs, path: ./Rules/proxy.mrs}
-  special:   {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/special.mrs, path: ./Rules/special.mrs}
-  reject:    {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/reject.mrs, path: ./Rules/reject.mrs}
+  direct:    {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/direct.mrs}
+  proxy:     {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/proxy.mrs}
+  special:   {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/special.mrs}
+  reject:    {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/reject.mrs}
  
 # IP规则
-  directip:  {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/directip.mrs, path: ./Rules/directip.mrs}
-  proxyip:   {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/proxyip.mrs, path: ./Rules/proxyip.mrs}
-  specialip: {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/special.mrs, path: ./Rules/specialip.mrs}
+  directip:  {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/directip.mrs}
+  proxyip:   {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/proxyip.mrs}
+  specialip: {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/special.mrs}
 
 # ===== 规则路由 =====
 rules: 
