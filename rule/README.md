@@ -25,13 +25,15 @@ rules:
 
 # 域名规则
   - RULE-SET,direct,DIRECT
+  - RULE-SET,special,Select
   - RULE-SET,proxy,Proxy
-  - RULE-SET,special,Proxy
+
   
 # IP规则
   - RULE-SET,directip,DIRECT,no-resolve
+  - RULE-SET,specialip,Select,no-resolve
   - RULE-SET,proxyip,Proxy,no-resolve
-  - RULE-SET,specialip,Proxy,no-resolve
+
 
 # 兜底规则
   - GEOIP,CN,DIRECT
