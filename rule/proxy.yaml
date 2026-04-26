@@ -1,6 +1,10 @@
 # Include：Cloudflare/Facebook/GitHub/Google/Instagram/Microsoft/NewsMedia/OneDrive/Proxy/Spotify/Streaming/Telegram/TikTok/Twitter/YouTube
 
 payload:
+  - +.googleapis.cn
+  - +.xn--ngstr-lra8j.com
+  - +.xn--ngstr-cn-8za9o.com
+  - +.services.googleapis.cn
   - +.000webhost.com
   - +.0emm.com
   - +.1000giri.net
