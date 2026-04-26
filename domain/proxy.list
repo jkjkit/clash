@@ -1,8 +1,12 @@
-
-+.linux.do
-+.ygpy.net
-+.ccfly.me
-+.hybgzs.com
-+.neodb.social
-+.folo.is
-+.ippure.com
+payload:
+  - '+.netlib.re'
+  - '+.monkrus.ws'
+  - '+.iprisk.top'
+  - '+.xyc.hk.cn'
+  - '+.hybgzs.com'
+  - '+.poast.org'
+  - '+.lightbrd.com'
+  - '+.ddns-ip.net'
+  - '+.cloudflare.com'
+  - '+.linux.do'
+  - '+.cmliussss.net'
