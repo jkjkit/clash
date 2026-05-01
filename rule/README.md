@@ -12,9 +12,6 @@ rule-providers:
   reject:    {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/reject.mrs}
  
 # IP规则
-  directip:  {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/directip.mrs}
-  proxyip:   {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/proxyip.mrs}
-  specialip: {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/special.mrs}
 
 # ===== 规则路由 =====
 rules: 
@@ -30,9 +27,7 @@ rules:
 
   
 # IP规则
-  - RULE-SET,directip,DIRECT,no-resolve
-  - RULE-SET,specialip,Select,no-resolve
-  - RULE-SET,proxyip,Proxy,no-resolve
+
 
 
 # 兜底规则
