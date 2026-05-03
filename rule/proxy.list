@@ -1,7 +1,6 @@
 +.linux.do
 +.neodb.social
 +.netlib.re
-
 +.gstatic.com
 +.googleusercontent.com
 +.ggpht.com
@@ -25,6 +24,8 @@ abs.twing.com
 pbs.twing.com
 ads-api.x.com
 api.x.com
+twitter.com
+api.twitter.com
 cdn.ldstatic.com
 play.google.com
 dl.google.com
