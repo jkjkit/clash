@@ -1,36 +1,34 @@
 ```YAML
 BaseDO: &BaseDO {type: http, behavior: domain, format: mrs, interval: 86400}
 BaseIP: &BaseIP {type: http, behavior: ipcidr, format: mrs, interval: 86400}
+DOMAIN: &DOMAIN {type: http, behavior: domain, format: text, interval: 86400}
+IPCIDR: &IPCIDR {type: http, behavior: ipcidr, format: text, interval: 86400}
 
-# ===== 规则订阅 =====
 rule-providers: 
 
-  privateip: {<<: *BaseIP, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/privateip.mrs}
+  cn_cn: {<<: *DOMAIN, url: https://easytalk.dpdns.org/https://raw.githubusercontent.com/jkjkit/clash/refs/heads/main/rule/direct.list}
+  no_on: {<<: *DOMAIN, url: https://easytalk.dpdns.org/https://raw.githubusercontent.com/jkjkit/clash/refs/heads/main/rule/proxy.list}
+  un_un: {<<: *BaseDO, url: https://easytalk.dpdns.org/https://raw.githubusercontent.com/jkjkit/clash/refs/heads/main/rule/reject.mrs}
+  ip_cn: {<<: *IPCIDR, url: https://easytalk.dpdns.org/https://raw.githubusercontent.com/jkjkit/clash/refs/heads/main/rule/ipdirect.list}
+  ip_no: {<<: *IPCIDR, url: https://easytalk.dpdns.org/https://raw.githubusercontent.com/jkjkit/clash/refs/heads/main/rule/ipproxy.list}
 
-  direct:    {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/direct.mrs}
-  proxy:     {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/proxy.mrs}
-  special:   {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/special.mrs}
-  reject:    {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/reject.mrs}
- 
-  proxyip:   {<<: *BaseIP, url: https://cdn.jsdelivr.net/gh/jkjkit/clash@main/rule/proxyip.mrs}
+  cn_do: {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.mrs}
+  no_cn: {<<: *BaseDO, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.mrs}
+  cn_ip: {<<: *BaseIP, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs}
 
-# ===== 规则路由 =====
-rules: 
+rules:
 
-# 拦截规则
   - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((GEOIP,CN)))),REJECT
-  - RULE-SET,reject,REJECT
+  - RULE-SET,un_un,REJECT
+  - RULE-SET,cn_cn,DIRECT
+  - RULE-SET,no_on,Proxy
+  - RULE-SET,ip_cn,DIRECT,no-resolve
+  - RULE-SET,ip_no,Proxy,no-resolve
 
-  - RULE-SET,privateip,DIRECT
+  - RULE-SET,cn_do,DIRECT
+  - RULE-SET,no_cn,Proxy
 
-  - RULE-SET,direct,DIRECT
-  - RULE-SET,special,Select
-  - RULE-SET,proxy,Proxy
-
-  - RULE-SET,proxyip,Proxy
-
-# 兜底规则
-  - GEOIP,CN,DIRECT
+  - RULE-SET,cn_ip,DIRECT,no-resolve
   - MATCH,Proxy
 
 ```
